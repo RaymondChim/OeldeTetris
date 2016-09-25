@@ -17,5 +17,7 @@ namespace NAT.Controllers {
         // обновляет все это барахло, следует вызывать в глобальном update
         void Update();
 
+        // вызывает отрисовку вьюшки
+        void Render();
     }
 }
