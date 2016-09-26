@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NAT.Models.GameCore;
+using NAT.Models;
 
 namespace NAT.Models {
     public interface IGameModel {
