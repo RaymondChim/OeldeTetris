@@ -10,13 +10,12 @@ using System.Windows;
 namespace NAT.Views {
     public interface IGameView {
         // событие "отрабатывающее" пи нажатии клавиши пользователем
-        //Action<string> KeyPressed { get; }
 
         // Отображаеть модель
         void Display(IGameModel _model);
         void TestDisplay();
         // тут вьюшка должна прочекать пользовательский ввод и вызвать событие если надо
-        void UpdateuserInput();
+        Keys[] UpdateuserInput();
     }
 
     class View : IGameView
@@ -82,7 +81,7 @@ namespace NAT.Views {
             //_GameMain.spriteBatch.Draw(loader, coor, Color.White);
             var x = Keyboard.GetState();
             var b = x.GetPressedKeys();
-            foreach (Keys e in b) { Debug.WriteLine(e); }
+            //foreach (Keys e in b) { Debug.WriteLine(e); }
             
             _GameMain.spriteBatch.DrawString(text, Mouse.GetState().Position.ToString(), new Vector2(50, 50), Color.Black);
             //_GameMain.spriteBatch.DrawString(text, sizeModifier.ToString(), new Vector2(100, 100), Color.Black);
@@ -140,6 +139,10 @@ namespace NAT.Views {
             }
 
         }
-        public void UpdateuserInput() { }
+        public Keys[] UpdateuserInput() {
+            var KeyArray = Keyboard.GetState().GetPressedKeys();
+            //Debug.WriteLine(KeyArray.Length);
+            return KeyArray;
+        }
     }
 }
