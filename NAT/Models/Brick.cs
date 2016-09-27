@@ -17,6 +17,13 @@ namespace NAT.Models {
             Ypos = _YPos;
         }
 
+
+        //deepCopy
+        public Brick(Brick other_block) {
+            this.Xpos = other_block.Xpos;
+            this.Ypos = other_block.Ypos;
+        }
+
     }
     // конкурс окончем
     // победил пока я

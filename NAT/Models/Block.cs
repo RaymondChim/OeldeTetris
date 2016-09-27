@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace NAT.Models {
     //ну блок это массив Brick невероятно правда?
@@ -15,6 +16,17 @@ namespace NAT.Models {
             Bricks = _Bricks;
             this.BlockIndex = BlockIndex;
             this.Bind = Bind;
+        }
+
+        //deepCopy
+        public Block(Block other_block) {
+            Debug.WriteLine(other_block.Bricks.Length);
+            this.Bricks = new Brick[other_block.Bricks.Length];
+            for (int i = 0; i < this.Bricks.Length; i++) {
+                this.Bricks[i] = new Brick(other_block.Bricks[i]);
+            }
+            this.Bind = new Brick(other_block.Bind);
+            this.BlockIndex = other_block.BlockIndex;
         }
 
     }

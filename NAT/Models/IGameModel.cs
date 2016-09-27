@@ -23,7 +23,7 @@ namespace NAT.Models {
         void FlipCurrentBlock(int mapId);
 
         // опускает текущий блок вниз и просчитывает закрытие линий на всех картах
-        void ProccessTurn();
+        void ProccessTurn(int mapId);
 
         // следующий блок который будет падать по идентификатору карты
         Block GetNextBlock(int mapId);
