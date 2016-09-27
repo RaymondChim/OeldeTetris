@@ -32,6 +32,8 @@ namespace NAT.Models {
             var rnd = new Random();
             Maps[0].CurrentBlock = CreateBlock(FuckingLetters.OrderBy(x => rnd.Next()).Last());
             Maps[1].CurrentBlock = CreateBlock(FuckingLetters.OrderBy(x => rnd.Next()).Last());
+            Maps[0].NextBlock = CreateBlock(FuckingLetters.OrderBy(x => rnd.Next()).Last());
+            Maps[1].NextBlock = CreateBlock(FuckingLetters.OrderBy(x => rnd.Next()).Last());
         }
 
         public Brick[] BrickMap(int mapId) {
