@@ -122,31 +122,7 @@ namespace NAT.Models {
         public void FlipCurrentBlock(int mapId) {
             //I Z S J L T O Смотри картинку 13.png в дискорде
             if (mapId >= Maps.Count()) throw new ArgumentException("Invalid Map Index");
-            FlipFigure(Maps[mapId].CurrentBlock);
-            return;
-            char BlockIndex = GetCurrentBlock(mapId).BlockIndex;
-            switch (BlockIndex) {
-                case 'I':
-                    FlipI(mapId);
-                    break;
-                case 'Z':
-                    FlipZ(mapId);
-                    break;
-                case 'S':
-                    FlipS(mapId);
-                    break;
-                case 'J':
-                    FlipJ(mapId);
-                    break;
-                case 'L':
-                    FlipL(mapId);
-                    break;
-                case 'T':
-                    FlipT(mapId);
-                    break;
-                case 'O':
-                    return;
-            }
+            FlipFigure(Maps[mapId].CurrentBlock,mapId);
         }
 
         public bool FlipEnable(int mapId, Block shape) {
@@ -190,162 +166,21 @@ namespace NAT.Models {
             Maps[mapId].CurrentBlock = shape;
             return true;
         }
-        public void FlipI(int mapId) {
-            Block shape = new Block(GetCurrentBlock(mapId));
-            if (shape.Bricks[0].Xpos < shape.Bind.Xpos) {
-                shape.Bricks[0].Xpos += 1;  shape.Bricks[0].Ypos += 1;
-                shape.Bricks[2].Xpos -= 1;  shape.Bricks[2].Ypos -= 1;
-                shape.Bricks[3].Xpos -= 2;  shape.Bricks[3].Ypos -= 2;
-                FlipEnable(mapId, shape);
-            } else if (shape.Bricks[0].Ypos > shape.Bind.Ypos) {
-                shape.Bricks[0].Xpos += 1; shape.Bricks[0].Ypos -= 1;
-                shape.Bricks[2].Xpos -= 1; shape.Bricks[2].Ypos += 1;
-                shape.Bricks[3].Xpos -= 2; shape.Bricks[3].Ypos += 2;
-                FlipEnable(mapId, shape);
-            } else if (shape.Bricks[0].Xpos > shape.Bind.Xpos) {
-                shape.Bricks[0].Xpos -= 1; shape.Bricks[0].Ypos -= 1;
-                shape.Bricks[2].Xpos += 1; shape.Bricks[2].Ypos += 1;
-                shape.Bricks[3].Xpos += 2; shape.Bricks[3].Ypos += 2;
-                FlipEnable(mapId, shape);
-            } else if (shape.Bricks[0].Ypos < shape.Bind.Ypos) {
-                shape.Bricks[0].Xpos -= 1; shape.Bricks[0].Ypos += 1;
-                shape.Bricks[2].Xpos += 1; shape.Bricks[2].Ypos -= 1;
-                shape.Bricks[3].Xpos += 2; shape.Bricks[3].Ypos -= 2;
-                FlipEnable(mapId, shape);
-            }
-        }
-        public void FlipZ(int mapId) {
-            Block shape = new Block(GetCurrentBlock(mapId));
-            if (shape.Bricks[3].Ypos > shape.Bind.Ypos) {
-                shape.Bricks[0].Ypos += 2;
-                shape.Bricks[1].Xpos += 1; shape.Bricks[1].Ypos += 1;
-                shape.Bricks[3].Xpos += 1; shape.Bricks[3].Ypos -= 1;
-                FlipEnable(mapId, shape);
-            } else if (shape.Bricks[3].Xpos > shape.Bind.Xpos) {
-                shape.Bricks[0].Xpos += 2; 
-                shape.Bricks[1].Xpos += 1; shape.Bricks[1].Ypos -= 1;
-                shape.Bricks[3].Xpos -= 1; shape.Bricks[3].Ypos -= 1;
-                FlipEnable(mapId, shape);
-            } else if (shape.Bricks[3].Ypos < shape.Bind.Ypos) {
-                shape.Bricks[0].Ypos -= 2;
-                shape.Bricks[1].Xpos -= 1; shape.Bricks[1].Ypos -= 1;
-                shape.Bricks[3].Xpos -= 1; shape.Bricks[3].Ypos += 1;
-                FlipEnable(mapId, shape);
-            } else if (shape.Bricks[3].Xpos < shape.Bind.Xpos) {
-                shape.Bricks[0].Xpos -= 2; 
-                shape.Bricks[1].Xpos -= 1; shape.Bricks[1].Ypos += 1;
-                shape.Bricks[3].Xpos += 1; shape.Bricks[3].Ypos += 1;
-                FlipEnable(mapId, shape);
-            }
-        }
-        public void FlipS(int mapId) {
-            Block shape = new Block(GetCurrentBlock(mapId));
-            if (shape.Bricks[0].Ypos < shape.Bind.Ypos) {
-                shape.Bricks[0].Xpos -= 1; shape.Bricks[0].Ypos += 1;
-                shape.Bricks[1].Xpos += 1; shape.Bricks[1].Ypos += 1;
-                shape.Bricks[3].Xpos += 2; shape.Bricks[3].Ypos -= 0; 
-                FlipEnable(mapId, shape);
-            } else if (shape.Bricks[0].Xpos < shape.Bind.Xpos) {
-                shape.Bricks[0].Xpos += 1; shape.Bricks[0].Ypos += 1;
-                shape.Bricks[1].Xpos += 1; shape.Bricks[1].Ypos -= 1;
-                shape.Bricks[3].Xpos -= 0; shape.Bricks[3].Ypos -= 2; 
-                FlipEnable(mapId, shape);
-            } else if (shape.Bricks[0].Ypos > shape.Bind.Ypos) {
-                shape.Bricks[0].Xpos += 1; shape.Bricks[0].Ypos -= 1;
-                shape.Bricks[1].Xpos -= 1; shape.Bricks[1].Ypos -= 1;
-                shape.Bricks[3].Xpos -= 2; shape.Bricks[3].Ypos += 0; 
-                FlipEnable(mapId, shape);
-            } else if (shape.Bricks[0].Xpos > shape.Bind.Xpos) {
-                shape.Bricks[0].Xpos -= 1; shape.Bricks[0].Ypos -= 1;
-                shape.Bricks[1].Xpos -= 1; shape.Bricks[1].Ypos += 1;
-                shape.Bricks[3].Xpos += 0; shape.Bricks[3].Ypos += 2; 
-                FlipEnable(mapId, shape);
-            }
-        }
-        public void FlipJ(int mapId) {
-            Block shape = new Block(GetCurrentBlock(mapId));
-            if (shape.Bricks[0].Ypos < shape.Bind.Ypos) {
-                shape.Bricks[0].Xpos -= 1; shape.Bricks[0].Ypos += 1;
-                shape.Bricks[2].Xpos += 1; shape.Bricks[2].Ypos -= 1;
-                shape.Bricks[3].Xpos += 0; shape.Bricks[3].Ypos -= 2;
-                FlipEnable(mapId, shape);
-            } else if (shape.Bricks[0].Xpos < shape.Bind.Xpos) {
-                shape.Bricks[0].Xpos += 1; shape.Bricks[0].Ypos += 1;
-                shape.Bricks[2].Xpos -= 1; shape.Bricks[2].Ypos -= 1;
-                shape.Bricks[3].Xpos -= 2; shape.Bricks[3].Ypos -= 0;
-                FlipEnable(mapId, shape);
-            } else if (shape.Bricks[0].Ypos > shape.Bind.Ypos) {
-                shape.Bricks[0].Xpos += 1; shape.Bricks[0].Ypos -= 1;
-                shape.Bricks[2].Xpos -= 1; shape.Bricks[2].Ypos += 1;
-                shape.Bricks[3].Xpos -= 0; shape.Bricks[3].Ypos += 2;
-                FlipEnable(mapId, shape);
-            } else if (shape.Bricks[0].Xpos > shape.Bind.Xpos) {
-                shape.Bricks[0].Xpos -= 1; shape.Bricks[0].Ypos -= 1;
-                shape.Bricks[2].Xpos += 1; shape.Bricks[2].Ypos += 1;
-                shape.Bricks[3].Xpos += 2; shape.Bricks[3].Ypos += 0;
-                FlipEnable(mapId, shape);
-            }
-        }
-        public void FlipL(int mapId) {
-            Block shape = new Block(GetCurrentBlock(mapId));
-            if (shape.Bricks[0].Ypos < shape.Bind.Ypos) {
-                shape.Bricks[0].Xpos -= 1; shape.Bricks[0].Ypos += 1;
-                shape.Bricks[2].Xpos += 2; shape.Bricks[2].Ypos += 0;
-                shape.Bricks[3].Xpos += 1; shape.Bricks[3].Ypos -= 1;
-                FlipEnable(mapId, shape);
-            } else if (shape.Bricks[0].Xpos < shape.Bind.Xpos) {
-                shape.Bricks[0].Xpos += 1; shape.Bricks[0].Ypos += 1;
-                shape.Bricks[2].Xpos += 0; shape.Bricks[2].Ypos -= 2;
-                shape.Bricks[3].Xpos -= 1; shape.Bricks[3].Ypos -= 1; 
-                FlipEnable(mapId, shape);
-            } else if (shape.Bricks[0].Ypos > shape.Bind.Ypos) {
-                shape.Bricks[0].Xpos += 1; shape.Bricks[0].Ypos -= 1;
-                shape.Bricks[2].Xpos -= 2; shape.Bricks[2].Ypos -= 0;
-                shape.Bricks[3].Xpos -= 1; shape.Bricks[3].Ypos += 1; 
-                FlipEnable(mapId, shape);
-            } else if (shape.Bricks[0].Xpos > shape.Bind.Xpos) {
-                shape.Bricks[0].Xpos -= 1; shape.Bricks[0].Ypos -= 1;
-                shape.Bricks[2].Xpos -= 0; shape.Bricks[2].Ypos += 2;
-                shape.Bricks[3].Xpos += 1; shape.Bricks[3].Ypos += 1; 
-                FlipEnable(mapId, shape);
-            }
-        }
-        public void FlipT(int mapId) {
-            Block shape = new Block(GetCurrentBlock(mapId));
-            if (shape.Bricks[0].Ypos < shape.Bind.Ypos) {
-                shape.Bricks[0].Xpos -= 1; shape.Bricks[0].Ypos += 1;
-                shape.Bricks[1].Xpos += 1; shape.Bricks[1].Ypos += 1;
-                shape.Bricks[3].Xpos += 1; shape.Bricks[3].Ypos -= 1; 
-                FlipEnable(mapId, shape);
-            } else if (shape.Bricks[0].Xpos < shape.Bind.Xpos) {
-                shape.Bricks[0].Xpos += 1; shape.Bricks[0].Ypos += 1;
-                shape.Bricks[1].Xpos += 1; shape.Bricks[1].Ypos -= 1;
-                shape.Bricks[3].Xpos -= 1; shape.Bricks[3].Ypos -= 1;
-                FlipEnable(mapId, shape);
-            } else if (shape.Bricks[0].Ypos > shape.Bind.Ypos) {
-                shape.Bricks[0].Xpos += 1; shape.Bricks[0].Ypos -= 1;
-                shape.Bricks[1].Xpos -= 1; shape.Bricks[1].Ypos -= 1;
-                shape.Bricks[3].Xpos -= 1; shape.Bricks[3].Ypos += 1; 
-                FlipEnable(mapId, shape);
-            } else if (shape.Bricks[0].Xpos > shape.Bind.Xpos) {
-                shape.Bricks[0].Xpos -= 1; shape.Bricks[0].Ypos -= 1;
-                shape.Bricks[1].Xpos -= 1; shape.Bricks[1].Ypos += 1;
-                shape.Bricks[3].Xpos += 1; shape.Bricks[3].Ypos += 1;
-                FlipEnable(mapId, shape);
-            }
-        }
+       
 
-        public void FlipFigure(Block shape) {
-            var minX = shape.Bricks.Min(x => x.Xpos);
-            var maxX = shape.Bricks.Max(x => x.Xpos);
-            var minY = shape.Bricks.Min(x => x.Ypos);
-            var maxY = shape.Bricks.Max(y => y.Ypos);
+        public void FlipFigure(Block shape,int mapId) {
+            var t_Shape = new Block(shape);
+
+            var minX = t_Shape.Bricks.Min(x => x.Xpos);
+            var maxX = t_Shape.Bricks.Max(x => x.Xpos);
+            var minY = t_Shape.Bricks.Min(x => x.Ypos);
+            var maxY = t_Shape.Bricks.Max(y => y.Ypos);
 
             var Matrix = new Brick[ 
                 maxX - minX + 1, 
                 maxY - minY + 1
                 ];
-            foreach (var brick in shape.Bricks)
+            foreach (var brick in t_Shape.Bricks)
                 Matrix[brick.Xpos - minX, brick.Ypos - minY] = brick;
 
             var T_Matrix = new Brick[Matrix.GetLength(1), Matrix.GetLength(0)];
@@ -361,11 +196,21 @@ namespace NAT.Models {
                     bricks.Add(new Brick(x + minX, y + minY));
                 }
 
-            var bindBlock = shape.Bricks[shape.BindBlockIndex];
+            var bindBlock = t_Shape.Bricks[t_Shape.BindBlockIndex];
             bricks = bricks.Select(x => new Brick(x.Xpos + (bindBlock.Xpos - minX) , x.Ypos + (bindBlock.Ypos - minY)  )).ToList();
+            t_Shape.Bricks = bricks.ToArray();
 
+            if(t_Shape.Bricks.Any(x => 
+                x.Xpos > 9  ||
+                x.Xpos < 0 ||
+                x.Ypos > 19 ||
+                x.Ypos < 0 ||
+                Maps[mapId].AllBricks.Any(y => y.Xpos == x.Xpos && y.Ypos == x.Ypos)
+                )) {
+            }else {
+                shape.Bricks = t_Shape.Bricks;
+            }
 
-            shape.Bricks = bricks.ToArray();
         }
 
 
