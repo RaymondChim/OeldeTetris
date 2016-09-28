@@ -10,7 +10,7 @@ namespace NAT.Models {
     public class GameModel : IGameModel {
 
         public Map[] Maps;
-
+        public int Score;
         private int _CurrentMapId = 0;
         public int CurrentMapId {
             get {
@@ -30,6 +30,7 @@ namespace NAT.Models {
         public Action GameOver { get; set; }
 
         public GameModel() {
+            Score = 0;
             Maps = new Map[] { new Map(), new Map() };
             var rnd = new Random();
             Maps[0].CurrentBlock = CreateBlock(FuckingLetters.OrderBy(x => rnd.Next()).Last());
@@ -437,6 +438,7 @@ namespace NAT.Models {
             for( var i = 0; i < 20; i++) {
                 var query = Maps[mapId].AllBricks.Where(x => (x.Ypos == i));
                 if(query.Count() == 10) {
+                    Score += 100;
                     Maps[mapId].AllBricks.RemoveAll(x => query.Contains(x));
                 }
             }
@@ -490,6 +492,7 @@ namespace NAT.Models {
             var targetMap = Maps[mapId];
 
             CheckLineFalling(mapId);
+            Debug.WriteLine(Score);
             if (CheckGameEnd()){ 
                 GameOver?.Invoke();
                 return;
@@ -498,6 +501,7 @@ namespace NAT.Models {
             if (MoveCurrentBlockDown(mapId) || Maps[mapId].CurrentBlockPassTurns != 0) {
                 //ok ..
             }else {
+                Score += 10;
                 Maps[mapId].CurrentBlockPassTurns++;
                 if (Maps[mapId].CurrentBlockPassTurns < 1) return;
 
@@ -505,7 +509,7 @@ namespace NAT.Models {
                 Maps[mapId].addBlockToMap();
                 var rnd = new Random();
                 var sym = FuckingLetters.OrderBy(x => rnd.Next()).Last();
-                Maps[mapId].CurrentBlock = CreateBlock(sym);
+                Maps[mapId].CurrentBlock = CreateBlock('I');
                 CheckLineField(mapId);
             }
             
