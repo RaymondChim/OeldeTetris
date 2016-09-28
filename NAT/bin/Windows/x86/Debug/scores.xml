@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<ScoreTable xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Scores>
+    <Score Name="Vasya" Count="100" />
+    <Score Name="Robert" Count="1000" />
+  </Scores>
+</ScoreTable>
