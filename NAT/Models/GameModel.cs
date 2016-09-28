@@ -10,7 +10,7 @@ namespace NAT.Models {
     public class GameModel : IGameModel {
 
         public Map[] Maps;
-        public int Score;
+        public int Score { get; set; }
         private int _CurrentMapId = 0;
         public int CurrentMapId {
             get {
@@ -509,7 +509,7 @@ namespace NAT.Models {
                 Maps[mapId].addBlockToMap();
                 var rnd = new Random();
                 var sym = FuckingLetters.OrderBy(x => rnd.Next()).Last();
-                Maps[mapId].CurrentBlock = CreateBlock('I');
+                Maps[mapId].CurrentBlock = CreateBlock(sym);
                 CheckLineField(mapId);
             }
             
