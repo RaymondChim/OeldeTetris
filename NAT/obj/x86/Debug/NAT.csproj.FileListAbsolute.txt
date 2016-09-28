@@ -41,3 +41,46 @@ C:\Users\Everlating\documents\visual studio 2015\Projects\NAT\NAT\bin\Windows\x8
 C:\Users\Everlating\documents\visual studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\textBorderY.xnb
 C:\Users\Everlating\documents\visual studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\tileA.xnb
 C:\Users\Everlating\documents\visual studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\yBorder.xnb
+D:\OeldeTetris-master\NAT\obj\x86\Debug\NAT.exe
+D:\OeldeTetris-master\NAT\obj\x86\Debug\NAT.pdb
+D:\OeldeTetris-master\NAT\obj\x86\Debug\NAT.csprojResolveAssemblyReference.cache
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\Images\Start_bt_selected.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\Images\Start_bt_unselected.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\fieldG.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\fieldY.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\game_screen.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\GLfieldG.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\GLfieldY.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\GLsideFieldG.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\GLsideFieldY.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\GLtextBorderY.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\NewSpriteEffect.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\sideFieldG.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\sideFieldY.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\tetris_screen2.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\text.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\textBorderY.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\tileA.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\yBorder.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\NAT.exe
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\NAT.pdb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\MonoGame.Framework.dll
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.MediaFoundation.dll
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.dll
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.XAudio2.dll
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.DXGI.dll
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.Direct3D11.dll
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.Direct2D1.dll
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.XInput.dll
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.RawInput.dll
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.Direct3D9.dll
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\MonoGame.Framework.xml
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.MediaFoundation.xml
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.xml
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.XAudio2.xml
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.DXGI.xml
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.Direct3D11.xml
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.Direct2D1.xml
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.XInput.xml
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.RawInput.xml
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.Direct3D9.xml

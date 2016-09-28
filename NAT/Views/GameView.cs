@@ -3,10 +3,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using NAT.Models;
 using NAT.Views;
+using NAT.Services;
+using System.Linq;
 using System.Diagnostics;
 using System.Windows;
 using System;
-using NAT.Services;
 
 namespace NAT.Views
 {
@@ -26,6 +27,7 @@ namespace NAT.Views
         private Texture2D GLfieldY;
         private SpriteFont text;
         private readonly GameMain _GameMain;
+        private Scores highscoreTable;
         //Разрешение
         private int resX = 1920;
         private int resY = 1080;
@@ -106,6 +108,9 @@ namespace NAT.Views
             //_GameMain.spriteBatch.DrawString(text, sizeModifier.ToString(), new Vector2(100, 100), Color.Black);
             _GameMain.spriteBatch.End();
         }
+        public void Init(Scores scores) {
+            highscoreTable = scores;
+        }
         public void Display(IGameModel _model)
         {
             // Пока var, если собъётся - напиши через блоки и брики
@@ -138,13 +143,13 @@ namespace NAT.Views
                 GLfrontField = GLfieldY;
                 backField = fieldY; //plc
                 GLbackField = GLfieldY;// plc
-                sideFieldOn = sideFieldY;
-                GLsideFieldOn = GLsideFieldY;
+                sideFieldOn = sideFieldG;
+                GLsideFieldOn = GLsideFieldG;
                 sideFieldOff = sideFieldY; //plc
                 textFieldOn = textBorderY;
                 textFieldOff = textBorderY; // plc
                 GLtextFieldOn = GLtextBorderY;                
-                _GameMain.spriteBatch.Draw(tileY, new Rectangle(1379, 174, 38, 48), Color.White);
+                _GameMain.spriteBatch.Draw(tileY, new Rectangle(1379, 174, 38, 48), Color.White); // layer marker
                 backMode = 0;
             }
             else
@@ -153,59 +158,31 @@ namespace NAT.Views
                 backBrick = tileY; //plc
                 frontField = fieldY;
                 GLfrontField = GLfieldY;
-                backField = fieldG; //plc
-                GLbackField = GLfieldY;// plc
+                backField = fieldG; 
+                GLbackField = GLfieldY;
                 sideFieldOn = sideFieldY;
                 GLsideFieldOn = GLsideFieldY;
-                sideFieldOff = sideFieldG; //plc
-                textFieldOn = textBorderY;
+                sideFieldOff = sideFieldG; 
+                textFieldOn = textBorderY; 
                 textFieldOff = textBorderY; // plc
                 GLtextFieldOn = GLtextBorderY;
-                _GameMain.spriteBatch.Draw(tileY, new Rectangle(1379, 275, 38, 48), Color.White);
+                _GameMain.spriteBatch.Draw(tileY, new Rectangle(1379, 275, 38, 48), Color.White); // layer marker
                 backMode = 1;
             }
             var mapBack = _model.BrickMap(backMode);
-            int lenFront = mapFront.Length;
-            int lenBack = mapBack.Length;
             Block currentBlockFront = _model.GetCurrentBlock(frontMode);
             Block currentBlockBack = _model.GetCurrentBlock(backMode);
-            int lenBlockFront = currentBlockFront.Bricks.Length;
-            int lenBlockBack = currentBlockBack.Bricks.Length;
             //Debug.WriteLine(lenFront, "boom");
             //Вывод заднего слоя блоков
-            for (int i = lenBack - 1; i >= 0; i--)
-            {
-                int x, y;
-                x = mapBack[i].Xpos;
-                y = mapBack[i].Ypos;
-                _GameMain.spriteBatch.Draw(backBrick, new Rectangle(backScreenOffset+resOffset + screenOffset + brickSizeX * x, backTopOffset+topOffset + brickSizeY * y, brickSizeX, brickSizeY), Color.White * 0.45f);
-            }
-            for (int i = lenBlockFront - 1; i >= 0; i--)
-            {
-                int x, y;
-                x = currentBlockBack.Bricks[i].Xpos;
-                y = currentBlockBack.Bricks[i].Ypos;
-                _GameMain.spriteBatch.Draw(frontBrick, new Rectangle(backScreenOffset + resOffset + screenOffset + brickSizeX * x, backTopOffset+ topOffset + brickSizeY * y, brickSizeX, brickSizeY), Color.White * 0.45f);
-            }
+            drawBrickMap(mapBack, tileY, backScreenOffset, backTopOffset, 0.45f);
+            drawBlock(currentBlockBack, tileY, backScreenOffset, backTopOffset, 0.45f);
+
             //Задний стакан
             _GameMain.spriteBatch.Draw(backField, new Rectangle(backScreenOffset+resOffset + screenOffset - 7, backTopOffset+ topOffset - 6, 772 / 2, 1593 / 2), Color.White *0.45f);
             //Вывод переднего слоя блоков
-            for (int i = lenBlockBack-1; i >= 0; i--)
-            {
-                int x, y;
-                x = currentBlockFront.Bricks[i].Xpos;
-                y = currentBlockFront.Bricks[i].Ypos;
-                _GameMain.spriteBatch.Draw(tileY, new Rectangle(resOffset + screenOffset + brickSizeX * x, topOffset + brickSizeY * y, brickSizeX, brickSizeY), Color.White);
-            }
-            ///Вывод переднего курблока
 
-            for (int i = lenFront - 1; i >= 0; i--)
-            {   //TODO: грамотный вывод слоёв (опасити на фронт, возможно ~(Color.White*0.7f))
-                int x, y;
-                x = mapFront[i].Xpos;
-                y = mapFront[i].Ypos;
-                _GameMain.spriteBatch.Draw(tileY, new Rectangle(resOffset + screenOffset + brickSizeX * x, topOffset + brickSizeY * y, brickSizeX, brickSizeY), Color.White);
-            }
+            drawBlock(currentBlockFront, tileY, 0, 0, 1f);
+            drawBrickMap(mapFront, tileY, 0, 0, 1f);
 
             //Передний стакан
             _GameMain.spriteBatch.Draw(frontField, new Rectangle(resOffset + screenOffset - 7, topOffset - 6, 772 / 2, 1593 / 2), Color.White);
@@ -214,46 +191,58 @@ namespace NAT.Views
 
             Block nextBlockFront = _model.GetNextBlock(frontMode);
             Block nextBlockBack = _model.GetNextBlock(backMode);
-            int lenNextBlockFront = currentBlockFront.Bricks.Length;
-            int lenNextBlockBack = currentBlockBack.Bricks.Length;
             //Следующий задний
-            for (int i = lenNextBlockBack - 1; i >= 0; i--)
-            {
-                int x, y;
-                x = nextBlockBack.Bricks[i].Xpos;
-                y = nextBlockBack.Bricks[i].Ypos;
-                _GameMain.spriteBatch.Draw(tileY, new Rectangle(/*resOffset + screenOffset*/961 + brickSizeX * x, /*topOffset*/675 + brickSizeY * y, brickSizeX, brickSizeY), Color.White);
-            }
+            int phX, phY;
+            phX = 959 - screenOffset - resOffset - 100;
+            phY = 674 - topOffset + 25;
+            drawBlock(nextBlockBack, tileY, phX+ backScreenOffset, phY + backTopOffset, 0.45f);
+            drawBlock(nextBlockFront, tileY, phX, phY, 1f);
 
-            //Следующий передний 961 675
-            for (int i = lenNextBlockFront - 1; i >= 0; i--)
-            {
-                int x, y;
-                x = nextBlockFront.Bricks[i].Xpos;
-                y = nextBlockFront.Bricks[i].Ypos;
-                _GameMain.spriteBatch.Draw(tileY, new Rectangle(/*resOffset + screenOffset*/700 + brickSizeX * x, /*topOffset*/800 + brickSizeY * y, brickSizeX, brickSizeY), Color.White*0.45f);
-            }
             _GameMain.spriteBatch.Draw(sideFieldOff, new Rectangle(959 + backScreenOffset, 674 + backTopOffset, 378 / 2, 394 / 2), Color.White*0.45f);
             _GameMain.spriteBatch.Draw(sideFieldOn, new Rectangle(959, 674, 378/2, 394/2), Color.White);
             _GameMain.spriteBatch.Draw(GLsideFieldOn , new Rectangle(959, 674, 378 / 2, 394 / 2), Color.White);
-            /*
-
-            
-          
-            for (int i = lenBlockBack; i > 0; i--){
-                int x, y;
-                x = currentBlockFront.Bricks[i].Xpos;
-                y = currentBlockFront.Bricks[i].Ypos;
-                _GameMain.spriteBatch.Draw(red, new Rectangle(resOffset + screenOffset + brickSizeX * x, topOffset + brickSizeY * y, brickSizeX, brickSizeY), Color.White);
-            }
-            */
+            DisplayScores(highscoreTable, _model);
             _GameMain.spriteBatch.End();
 
         }
+        private void drawBlock(Block curBlock, Texture2D tile, int offsetSide, int offsetTop, float opacity) {
+            int x, y, len;
+            len = curBlock.Bricks.Length;
+            for (int i = len - 1; i >= 0; i--)
+            {
+                x = curBlock.Bricks[i].Xpos;
+                y = curBlock.Bricks[i].Ypos;
+                _GameMain.spriteBatch.Draw(tile, new Rectangle(offsetSide+resOffset + screenOffset + brickSizeX * x, offsetTop + topOffset + brickSizeY * y, brickSizeX, brickSizeY), Color.White*opacity);
+            }
+        }
+        private void drawBrickMap(Brick[] map, Texture2D tile, int offsetSide, int offsetTop, float opacity) {
+            int x, y, len;
+            len = map.Length;
+            for (int i = len - 1; i >= 0; i--)
+            {
+                x = map[i].Xpos;
+                y = map[i].Ypos;
+                _GameMain.spriteBatch.Draw(tile, new Rectangle(offsetSide + resOffset + screenOffset + brickSizeX * x, offsetTop + topOffset + brickSizeY * y, brickSizeX, brickSizeY), Color.White * opacity);
+            }
+        }
+
+        public void DisplayScores(Scores scores, IGameModel _model) {
+            int startX = 969, startY = 441;
+            var scoreArray = scores.Heaver.Union(new ScoreHeaver[] { new ScoreHeaver("XXX",_model.CurrentScore)}).OrderByDescending(x => x.Score).Take(10).ToList();
+            for (int i = 0; i < scoreArray.Count() ; i++) {
+                _GameMain.spriteBatch.DrawString(text, scoreArray[i].Name + "    " + scoreArray[i].Score, new Vector2(startX, startY + 15 * i), Color.Black);
+            }
+            /*
+            for (int i = 0; i < 10; i++) {
+                _GameMain.spriteBatch.DrawString(text, "Score", new Vector2(startX, startY+15*i), Color.Black);
+            }*/
+            
+ //969 441
+        }
+
         public Keys[] UpdateuserInput()
         {
             var KeyArray = Keyboard.GetState().GetPressedKeys();
-            //Debug.WriteLine(KeyArray.Length);
             return KeyArray;
         }
 
@@ -261,8 +250,6 @@ namespace NAT.Views
             //TODO : DO
         }
 
-        public void Init(Scores scores) {
-        }
     }
 }
 

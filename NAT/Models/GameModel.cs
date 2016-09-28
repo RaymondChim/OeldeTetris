@@ -23,7 +23,7 @@ namespace NAT.Models {
 
         public int CurrentScore {
             get {
-                return 0;
+                return Score;
             }
         }
 
