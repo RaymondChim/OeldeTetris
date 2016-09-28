@@ -25,7 +25,10 @@ namespace NAT.Services {
 
         public Scores GetScores() {
             var serializer = new XmlSerializer(typeof(Scores));
-            return serializer.Deserialize(new FileStream(SCORE_FILENAME,FileMode.Open)) as Scores;
+            var stream = new FileStream(SCORE_FILENAME, FileMode.Open);
+            var scores = serializer.Deserialize(stream) as Scores;
+            stream.Close();
+            return scores;
         }
     }
 }
