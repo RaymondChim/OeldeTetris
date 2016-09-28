@@ -55,7 +55,7 @@ namespace NAT.Models {
                                           new Brick(4, 2),
                                           new Brick(4, 3)}, 
                                           BlockIndex, 
-                                          new Brick(4, 2));
+                                          new Brick(4, 1));
                     return I;
                 #region other_switch
                 case 'Z':
@@ -87,10 +87,10 @@ namespace NAT.Models {
                     return J;
                 case 'L':
                     Block L = new Block(new Brick[]
-                                        { new Brick(5, 0),
+                                        { new Brick(4, 2),
+                                          new Brick(5, 0),
                                           new Brick(5, 1),
-                                          new Brick(5, 2),
-                                          new Brick(4, 2)},
+                                          new Brick(5, 2)},
                                           BlockIndex,
                                           new Brick(5, 1));
                     return L;
@@ -122,13 +122,185 @@ namespace NAT.Models {
         public void FlipCurrentBlock(int mapId) {
             //I Z S J L T O Смотри картинку 13.png в дискорде
             if (mapId >= Maps.Count()) throw new ArgumentException("Invalid Map Index");
-            FlipFigure(Maps[mapId].CurrentBlock,mapId);
+           // FlipFigure(Maps[mapId].CurrentBlock,mapId);
+            char BlockIndex = Maps[mapId].CurrentBlock.BlockIndex;
+            switch (BlockIndex) {
+                case 'I':
+                    FlipI(mapId);
+                    break;
+                case 'Z':
+                    FlipZ(mapId);
+                    break;
+                case 'S':
+                    FlipS(mapId);
+                    break;
+                case 'J':
+                    FlipJ(mapId);
+                    break;
+                case 'L':
+                    FlipL(mapId);
+                    break;
+                case 'T':
+                    FlipT(mapId);
+                    break;
+                case 'O':
+                    return;
+            }
+        }
+
+        public void FlipI(int mapId) {
+            Block shape = new Block(GetCurrentBlock(mapId));
+            if (shape.Bricks[0].Ypos < shape.Bind.Ypos) {
+                shape.Bricks[0].Xpos += 1; shape.Bricks[0].Ypos += 1;
+                shape.Bricks[2].Xpos -= 1; shape.Bricks[2].Ypos -= 1;
+                shape.Bricks[3].Xpos -= 2; shape.Bricks[3].Ypos -= 2;
+                FlipEnable(mapId, shape);
+                return;
+            } else if (shape.Bricks[0].Xpos > shape.Bind.Xpos) {
+                shape.Bricks[0].Xpos -= 1; shape.Bricks[0].Ypos += 1;
+                shape.Bricks[2].Xpos += 1; shape.Bricks[2].Ypos -= 1;
+                shape.Bricks[3].Xpos += 2; shape.Bricks[3].Ypos -= 2;
+                FlipEnable(mapId, shape);
+                return;
+            } else if (shape.Bricks[0].Ypos > shape.Bind.Ypos) {
+                shape.Bricks[0].Xpos -= 1; shape.Bricks[0].Ypos -= 1;
+                shape.Bricks[2].Xpos += 1; shape.Bricks[2].Ypos += 1;
+                shape.Bricks[3].Xpos += 2; shape.Bricks[3].Ypos += 2;
+                FlipEnable(mapId, shape);
+                return;
+            } else if (shape.Bricks[0].Xpos < shape.Bind.Xpos) {
+                shape.Bricks[0].Xpos += 1; shape.Bricks[0].Ypos -= 1;
+                shape.Bricks[2].Xpos -= 1; shape.Bricks[2].Ypos += 1;
+                shape.Bricks[3].Xpos -= 2; shape.Bricks[3].Ypos += 2;
+                FlipEnable(mapId, shape);
+                return;
+            }
+        }
+        public void FlipZ(int mapId) {
+            Block shape = new Block(GetCurrentBlock(mapId));
+            if (shape.Bricks[3].Ypos > shape.Bind.Ypos) {
+                shape.Bricks[0].Ypos += 2;
+                shape.Bricks[1].Xpos += 1; shape.Bricks[1].Ypos += 1;
+                shape.Bricks[3].Xpos += 1; shape.Bricks[3].Ypos -= 1;
+                FlipEnable(mapId, shape);
+            } else if (shape.Bricks[3].Xpos > shape.Bind.Xpos) {
+                shape.Bricks[0].Xpos += 2;
+                shape.Bricks[1].Xpos += 1; shape.Bricks[1].Ypos -= 1;
+                shape.Bricks[3].Xpos -= 1; shape.Bricks[3].Ypos -= 1;
+                FlipEnable(mapId, shape);
+            } else if (shape.Bricks[3].Ypos < shape.Bind.Ypos) {
+                shape.Bricks[0].Ypos -= 2;
+                shape.Bricks[1].Xpos -= 1; shape.Bricks[1].Ypos -= 1;
+                shape.Bricks[3].Xpos -= 1; shape.Bricks[3].Ypos += 1;
+                FlipEnable(mapId, shape);
+            } else if (shape.Bricks[3].Xpos < shape.Bind.Xpos) {
+                shape.Bricks[0].Xpos -= 2;
+                shape.Bricks[1].Xpos -= 1; shape.Bricks[1].Ypos += 1;
+                shape.Bricks[3].Xpos += 1; shape.Bricks[3].Ypos += 1;
+                FlipEnable(mapId, shape);
+            }
+        }
+        public void FlipS(int mapId) {
+            Block shape = new Block(GetCurrentBlock(mapId));
+            if (shape.Bricks[0].Ypos < shape.Bind.Ypos) {
+                shape.Bricks[0].Xpos -= 1; shape.Bricks[0].Ypos += 1;
+                shape.Bricks[1].Xpos += 1; shape.Bricks[1].Ypos += 1;
+                shape.Bricks[3].Xpos += 2; shape.Bricks[3].Ypos -= 0;
+                FlipEnable(mapId, shape);
+            } else if (shape.Bricks[0].Xpos < shape.Bind.Xpos) {
+                shape.Bricks[0].Xpos += 1; shape.Bricks[0].Ypos += 1;
+                shape.Bricks[1].Xpos += 1; shape.Bricks[1].Ypos -= 1;
+                shape.Bricks[3].Xpos -= 0; shape.Bricks[3].Ypos -= 2;
+                FlipEnable(mapId, shape);
+            } else if (shape.Bricks[0].Ypos > shape.Bind.Ypos) {
+                shape.Bricks[0].Xpos += 1; shape.Bricks[0].Ypos -= 1;
+                shape.Bricks[1].Xpos -= 1; shape.Bricks[1].Ypos -= 1;
+                shape.Bricks[3].Xpos -= 2; shape.Bricks[3].Ypos += 0;
+                FlipEnable(mapId, shape);
+            } else if (shape.Bricks[0].Xpos > shape.Bind.Xpos) {
+                shape.Bricks[0].Xpos -= 1; shape.Bricks[0].Ypos -= 1;
+                shape.Bricks[1].Xpos -= 1; shape.Bricks[1].Ypos += 1;
+                shape.Bricks[3].Xpos += 0; shape.Bricks[3].Ypos += 2;
+                FlipEnable(mapId, shape);
+            }
+        }
+        public void FlipJ(int mapId) {
+            Block shape = new Block(GetCurrentBlock(mapId));
+            if (shape.Bricks[0].Ypos < shape.Bind.Ypos) {
+                shape.Bricks[0].Xpos += 1; shape.Bricks[0].Ypos += 1;
+                shape.Bricks[2].Xpos -= 1; shape.Bricks[2].Ypos -= 1;
+                shape.Bricks[3].Xpos -= 2; shape.Bricks[3].Ypos -= 0;
+                FlipEnable(mapId, shape);
+            } else if (shape.Bricks[0].Xpos > shape.Bind.Xpos) {
+                shape.Bricks[0].Xpos -= 1; shape.Bricks[0].Ypos += 1;
+                shape.Bricks[2].Xpos += 1; shape.Bricks[2].Ypos -= 1;
+                shape.Bricks[3].Xpos += 0; shape.Bricks[3].Ypos -= 2;
+                FlipEnable(mapId, shape);
+            } else if (shape.Bricks[0].Ypos > shape.Bind.Ypos) {
+                shape.Bricks[0].Xpos -= 1; shape.Bricks[0].Ypos -= 1;
+                shape.Bricks[2].Xpos += 1; shape.Bricks[2].Ypos += 1;
+                shape.Bricks[3].Xpos += 2; shape.Bricks[3].Ypos += 0;
+                FlipEnable(mapId, shape);
+            } else if (shape.Bricks[0].Xpos < shape.Bind.Xpos) {
+                shape.Bricks[0].Xpos += 1; shape.Bricks[0].Ypos -= 1;
+                shape.Bricks[2].Xpos -= 1; shape.Bricks[2].Ypos += 1;
+                shape.Bricks[3].Xpos -= 0; shape.Bricks[3].Ypos += 2;
+                FlipEnable(mapId, shape);
+            }
+        }
+        public void FlipL(int mapId) {
+            Debug.WriteLine("Here");
+            Block shape = new Block(GetCurrentBlock(mapId));
+            if (shape.Bricks[1].Ypos < shape.Bind.Ypos) {
+                shape.Bricks[0].Xpos += 0; shape.Bricks[0].Ypos -= 2;
+                shape.Bricks[1].Xpos += 1; shape.Bricks[1].Ypos += 1;
+                shape.Bricks[3].Xpos -= 1; shape.Bricks[3].Ypos -= 1;
+                FlipEnable(mapId, shape);
+            } else if (shape.Bricks[1].Xpos > shape.Bind.Xpos) {
+                shape.Bricks[0].Xpos += 2; shape.Bricks[0].Ypos += 0;
+                shape.Bricks[1].Xpos -= 1; shape.Bricks[1].Ypos += 1;
+                shape.Bricks[3].Xpos += 1; shape.Bricks[3].Ypos -= 1;
+                FlipEnable(mapId, shape);
+            } else if (shape.Bricks[1].Ypos > shape.Bind.Ypos) {
+                shape.Bricks[0].Xpos += 0; shape.Bricks[0].Ypos += 2;
+                shape.Bricks[1].Xpos -= 1; shape.Bricks[1].Ypos -= 1;
+                shape.Bricks[3].Xpos += 1; shape.Bricks[3].Ypos += 1;
+                FlipEnable(mapId, shape);
+            } else if (shape.Bricks[1].Xpos < shape.Bind.Xpos) {
+                shape.Bricks[0].Xpos -= 2; shape.Bricks[0].Ypos -= 0;
+                shape.Bricks[1].Xpos += 1; shape.Bricks[1].Ypos -= 1;
+                shape.Bricks[3].Xpos -= 1; shape.Bricks[3].Ypos += 1;
+                FlipEnable(mapId, shape);
+            }
+        }
+        public void FlipT(int mapId) {
+            Block shape = new Block(GetCurrentBlock(mapId));
+            if (shape.Bricks[0].Ypos < shape.Bind.Ypos) {
+                shape.Bricks[0].Xpos -= 1; shape.Bricks[0].Ypos += 1;
+                shape.Bricks[1].Xpos += 1; shape.Bricks[1].Ypos += 1;
+                shape.Bricks[3].Xpos += 1; shape.Bricks[3].Ypos -= 1;
+                FlipEnable(mapId, shape);
+            } else if (shape.Bricks[0].Xpos < shape.Bind.Xpos) {
+                shape.Bricks[0].Xpos += 1; shape.Bricks[0].Ypos += 1;
+                shape.Bricks[1].Xpos += 1; shape.Bricks[1].Ypos -= 1;
+                shape.Bricks[3].Xpos -= 1; shape.Bricks[3].Ypos -= 1;
+                FlipEnable(mapId, shape);
+            } else if (shape.Bricks[0].Ypos > shape.Bind.Ypos) {
+                shape.Bricks[0].Xpos += 1; shape.Bricks[0].Ypos -= 1;
+                shape.Bricks[1].Xpos -= 1; shape.Bricks[1].Ypos -= 1;
+                shape.Bricks[3].Xpos -= 1; shape.Bricks[3].Ypos += 1;
+                FlipEnable(mapId, shape);
+            } else if (shape.Bricks[0].Xpos > shape.Bind.Xpos) {
+                shape.Bricks[0].Xpos -= 1; shape.Bricks[0].Ypos -= 1;
+                shape.Bricks[1].Xpos -= 1; shape.Bricks[1].Ypos += 1;
+                shape.Bricks[3].Xpos += 1; shape.Bricks[3].Ypos += 1;
+                FlipEnable(mapId, shape);
+            }
         }
 
         public bool FlipEnable(int mapId, Block shape) {
             if (Maps[mapId].CurrentBlock.Bricks.Any(x => x.Ypos >= 19))
                 return false;
-
             for (int i = 0; i < shape.Bricks.Length; i++) {
                 if (shape.Bricks[i].Ypos < 0
                     || shape.Bricks[i].Ypos > 19
@@ -258,7 +430,6 @@ namespace NAT.Models {
 
         //Плохой, плохой, очень плохой метод (но рабочий) - НЕТ!
         public void CheckLineField(int mapId) {
-            bool[,] field = BricksField(mapId);
             foreach (Brick br in Maps[mapId].AllBricks) {
                 Debug.Write(br.Xpos + " " + br.Ypos + "\n");
             }
