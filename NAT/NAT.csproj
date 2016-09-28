@@ -38,14 +38,20 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\IGameController.cs" />
     <Compile Include="GameMain.cs" />
-    <Compile Include="Models\GameCore\Block.cs" />
-    <Compile Include="Models\GameCore\Brick.cs" />
-    <Compile Include="Models\GameCore\Map.cs" />
+    <Compile Include="Menu\Buttons\ButtonBase.cs" />
+    <Compile Include="Menu\Menu.cs" />
+    <Compile Include="Menu\Buttons\SimpleButton.cs" />
+    <Compile Include="Models\Block.cs" />
+    <Compile Include="Models\Brick.cs" />
+    <Compile Include="Models\GameModel.cs" />
     <Compile Include="Models\IGameModel.cs" />
+    <Compile Include="Models\Map.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\GameView.cs" />
     <Compile Include="Views\IGameView.cs" />
   </ItemGroup>
   <ItemGroup>

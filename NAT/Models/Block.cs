@@ -12,10 +12,13 @@ namespace NAT.Models {
         public Brick Bind;      //Относительно какой точки вращаем
         public char BlockIndex; //I Z S J L T O  //Имя фигуры
 
-        public Block(Brick[] _Bricks, char BlockIndex, Brick Bind) {
+        public int BindBlockIndex;
+
+        public Block(Brick[] _Bricks, char BlockIndex, Brick Bind, int _bindBlock = 0) {
             Bricks = _Bricks;
             this.BlockIndex = BlockIndex;
             this.Bind = Bind;
+            BindBlockIndex = _bindBlock;
         }
 
         //deepCopy

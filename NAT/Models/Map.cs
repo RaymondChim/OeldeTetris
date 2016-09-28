@@ -13,6 +13,8 @@ namespace NAT.Models {
 
         public Block NextBlock;
 
+        public int CurrentBlockPassTurns = 0;
+
         public void addBlockToMap() {
             for(int i = 0; i < 4; i++) {
                 Debug.WriteLine("Block to Map index " + i + ": " + CurrentBlock.Bricks[i].Xpos + " " + CurrentBlock.Bricks[i].Ypos);

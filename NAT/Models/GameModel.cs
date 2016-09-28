@@ -27,10 +27,13 @@ namespace NAT.Models {
             }
         }
 
+        public Action GameOver { get; set; }
+
         public GameModel() {
             Maps = new Map[] { new Map(), new Map() };
             var rnd = new Random();
             Maps[0].CurrentBlock = CreateBlock(FuckingLetters.OrderBy(x => rnd.Next()).Last());
+            //Maps[0].CurrentBlock = CreateBlock('I');
             Maps[1].CurrentBlock = CreateBlock(FuckingLetters.OrderBy(x => rnd.Next()).Last());
             Maps[0].NextBlock = CreateBlock(FuckingLetters.OrderBy(x => rnd.Next()).Last());
             Maps[1].NextBlock = CreateBlock(FuckingLetters.OrderBy(x => rnd.Next()).Last());
@@ -47,67 +50,67 @@ namespace NAT.Models {
             switch (BlockIndex) {
                 case 'I':
                     Block I = new Block(new Brick[]
-                                        { new Brick(0, 5),
-                                          new Brick(1, 5),
-                                          new Brick(2, 5),
-                                          new Brick(3, 5)}, 
+                                        { new Brick(4, 0),
+                                          new Brick(4, 1),
+                                          new Brick(4, 2),
+                                          new Brick(4, 3)}, 
                                           BlockIndex, 
-                                          new Brick(1, 5));
+                                          new Brick(4, 2));
                     return I;
                 #region other_switch
                 case 'Z':
                     Block Z = new Block(new Brick[]
-                                        { new Brick(0, 4),
-                                          new Brick(0, 5),
-                                          new Brick(1, 5),
-                                          new Brick(1, 6)},
+                                        { new Brick(4, 0),
+                                          new Brick(4, 1),
+                                          new Brick(5, 1),
+                                          new Brick(5, 2)},
                                           BlockIndex,
-                                          new Brick(1, 5));
+                                          new Brick(5, 1));
                     return Z;
                 case 'S':
                     Block S = new Block(new Brick[]
-                                        { new Brick(1, 4),
-                                          new Brick(0, 5),
-                                          new Brick(1, 5),
-                                          new Brick(0, 6)},
+                                        { new Brick(5, 0),
+                                          new Brick(4, 1),
+                                          new Brick(5, 1),
+                                          new Brick(4, 2)},
                                           BlockIndex,
-                                          new Brick(1, 5));
+                                          new Brick(5, 1));
                     return S;
                 case 'J':
                     Block J = new Block(new Brick[]
-                                        { new Brick(0, 4),
-                                          new Brick(0, 5),
-                                          new Brick(0, 6),
-                                          new Brick(1, 6)},
+                                        { new Brick(4, 0),
+                                          new Brick(4, 1),
+                                          new Brick(4, 2),
+                                          new Brick(5, 2)},
                                           BlockIndex,
-                                          new Brick(0, 5));
+                                          new Brick(4, 1),2);
                     return J;
                 case 'L':
                     Block L = new Block(new Brick[]
-                                        { new Brick(1, 4),
-                                          new Brick(1, 5),
-                                          new Brick(1, 6),
-                                          new Brick(0, 6)},
+                                        { new Brick(5, 0),
+                                          new Brick(5, 1),
+                                          new Brick(5, 2),
+                                          new Brick(4, 2)},
                                           BlockIndex,
-                                          new Brick(1, 5));
+                                          new Brick(5, 1));
                     return L;
                 case 'T':
                     Block T = new Block(new Brick[]
-                                        { new Brick(1, 4),
-                                          new Brick(0, 5),
-                                          new Brick(1, 5),
-                                          new Brick(1, 6)},
+                                        { new Brick(5, 0),
+                                          new Brick(4, 1),
+                                          new Brick(5, 1),
+                                          new Brick(5, 2)},
                                           BlockIndex,
-                                          new Brick(1, 5));
+                                          new Brick(5, 1));
                     return T;
                 case 'O':
                     Block O = new Block(new Brick[]
-                                        { new Brick(0, 4),
-                                          new Brick(0, 5),
-                                          new Brick(1, 4),
-                                          new Brick(1, 5)},
+                                        { new Brick(4, 0),
+                                          new Brick(4, 1),
+                                          new Brick(5, 0),
+                                          new Brick(5, 1)},
                                           BlockIndex,
-                                          new Brick(0, 4));
+                                          new Brick(4, 0));
                     return O;
                 default:
                     throw new ArgumentException("Invalid Block Index");
@@ -119,6 +122,8 @@ namespace NAT.Models {
         public void FlipCurrentBlock(int mapId) {
             //I Z S J L T O Смотри картинку 13.png в дискорде
             if (mapId >= Maps.Count()) throw new ArgumentException("Invalid Map Index");
+            FlipFigure(Maps[mapId].CurrentBlock);
+            return;
             char BlockIndex = GetCurrentBlock(mapId).BlockIndex;
             switch (BlockIndex) {
                 case 'I':
@@ -145,11 +150,14 @@ namespace NAT.Models {
         }
 
         public bool FlipEnable(int mapId, Block shape) {
+            if (Maps[mapId].CurrentBlock.Bricks.Any(x => x.Ypos >= 19))
+                return false;
+
             for (int i = 0; i < shape.Bricks.Length; i++) {
-                if (shape.Bricks[i].Xpos < 0
-                    || shape.Bricks[i].Xpos > 19
-                    || shape.Bricks[i].Ypos < 0
-                    || shape.Bricks[i].Ypos > 9) {
+                if (shape.Bricks[i].Ypos < 0
+                    || shape.Bricks[i].Ypos > 19
+                    || shape.Bricks[i].Xpos < 0
+                    || shape.Bricks[i].Xpos > 9) {
                     #region comments
                     //Maps[0].CurrentBlock = crutch_shape;
                     //shape = crutch_shape;
@@ -164,8 +172,8 @@ namespace NAT.Models {
             }
             foreach (Brick filled in Maps[mapId].AllBricks) {
                 for (int i = 0; i < shape.Bricks.Length; i++) {
-                    if (filled.Xpos == shape.Bricks[i].Xpos
-                        && filled.Ypos == shape.Bricks[i].Ypos) {
+                    if (filled.Ypos == shape.Bricks[i].Ypos
+                        && filled.Xpos == shape.Bricks[i].Xpos) {
                         #region comments
                         //Maps[0].CurrentBlock = crutch_shape;
                         //shape = crutch_shape;
@@ -327,6 +335,39 @@ namespace NAT.Models {
             }
         }
 
+        public void FlipFigure(Block shape) {
+            var minX = shape.Bricks.Min(x => x.Xpos);
+            var maxX = shape.Bricks.Max(x => x.Xpos);
+            var minY = shape.Bricks.Min(x => x.Ypos);
+            var maxY = shape.Bricks.Max(y => y.Ypos);
+
+            var Matrix = new Brick[ 
+                maxX - minX + 1, 
+                maxY - minY + 1
+                ];
+            foreach (var brick in shape.Bricks)
+                Matrix[brick.Xpos - minX, brick.Ypos - minY] = brick;
+
+            var T_Matrix = new Brick[Matrix.GetLength(1), Matrix.GetLength(0)];
+
+            for (var x = 0; x < Matrix.GetLength(0); x++)
+                for (var y = 0; y < Matrix.GetLength(1); y++)
+                    T_Matrix[y, x] = Matrix[ Matrix.GetLength(0) - x - 1, y];
+
+            var bricks = new List<Brick>();
+            for (var x = 0; x < T_Matrix.GetLength(0); x++)
+                for (var y = 0; y < T_Matrix.GetLength(1); y++) { 
+                    if (T_Matrix[x, y] == null) continue;
+                    bricks.Add(new Brick(x + minX, y + minY));
+                }
+
+            var bindBlock = shape.Bricks[shape.BindBlockIndex];
+            bricks = bricks.Select(x => new Brick(x.Xpos + (bindBlock.Xpos - minX) , x.Ypos + (bindBlock.Ypos - minY)  )).ToList();
+
+
+            shape.Bricks = bricks.ToArray();
+        }
+
 
         public Block GetCurrentBlock(int mapId) {
             if (mapId >= Maps.Count()) throw new ArgumentException("Invalid Map Index");
@@ -341,9 +382,9 @@ namespace NAT.Models {
             if (mapId >= Maps.Count()) throw new ArgumentException("Invalid Map Index");
             Block shape = new Block(GetCurrentBlock(mapId));
             for (int i = 0; i < Maps[mapId].CurrentBlock.Bricks.Count(); i++) {
-                shape.Bricks[i].Ypos += direction;
+                shape.Bricks[i].Xpos += direction;
             }
-            shape.Bind.Ypos += direction;
+            shape.Bind.Xpos += direction;
             FlipEnable(mapId, shape);
         }
 
@@ -354,48 +395,51 @@ namespace NAT.Models {
             if (mapId >= Maps.Count()) throw new ArgumentException("Invalid Map Index");
             Block shape = new Block(GetCurrentBlock(mapId));
             for (int i = 0; i < Maps[mapId].CurrentBlock.Bricks.Count(); i++) {
-                shape.Bricks[i].Xpos += 1;
+                shape.Bricks[i].Ypos += 1;
             }
-            shape.Bind.Xpos += 1;
+            shape.Bind.Ypos += 1;
             return FlipEnable(mapId, shape);
         }
 
         public bool[,] BricksField(int mapId) {
             if (mapId >= Maps.Count()) throw new ArgumentException("Invalid Map Index");
             Brick[] bricks_arr = Maps[mapId].AllBricks.ToArray();
-            bool[,] matrix = new bool[20, 10];
+            bool[,] matrix = new bool[10, 20];
             for (int i = 0; i < bricks_arr.Length; i++) {
                 matrix[bricks_arr[i].Xpos, bricks_arr[i].Ypos] = true;
             }
             return matrix;
         }
 
-        //Плохой, плохой, очень плохой метод (но рабочий)
+        //Плохой, плохой, очень плохой метод (но рабочий) - НЕТ!
         public void CheckLineField(int mapId) {
             bool[,] field = BricksField(mapId);
-            Maps[mapId].AllBricks = Maps[mapId].AllBricks.OrderBy(x => x.Xpos).ThenBy(x => x.Ypos).ToList();
-            int counter;
             foreach (Brick br in Maps[mapId].AllBricks) {
                 Debug.Write(br.Xpos + " " + br.Ypos + "\n");
             }
 
-            for (int i = 0; i < 20; i++) {
-                counter = 0;
-                if (Maps[mapId].AllBricks.Count(x => (x.Xpos == i)) == 10) {
-                    foreach (Brick br in Maps[mapId].AllBricks) {
-                        if (br.Xpos == i) break;
-                        counter++;
-                    }
-                    Maps[mapId].AllBricks.RemoveRange(counter, 10);
-                    foreach (Brick br in Maps[mapId].AllBricks) {
-                        if (br.Xpos >= i) break;
-                        br.Xpos += 1;
-                    }
+            for( var i = 0; i < 20; i++) {
+                var query = Maps[mapId].AllBricks.Where(x => (x.Ypos == i));
+                if(query.Count() == 10) {
+                    Maps[mapId].AllBricks.RemoveAll(x => query.Contains(x));
+                }
+            }
+
+
+            //TODO: add score
+        }
+
+        private void CheckLineFalling(int mapId) {
+            for (var i = 19; i >= 0; i--) {
+                if (Maps[mapId].AllBricks.Count(x => x.Ypos == i) == 0) {
+                    Maps[mapId].AllBricks = Maps[mapId].AllBricks.Select(x => x.Ypos <= i ? new Brick(x.Xpos, x.Ypos + 1) : x).ToList();
                 }
             }
         }
 
-
+        private bool CheckGameEnd() {
+            return Maps.Any(x => x.AllBricks.Count(y => y.Ypos <= 1) != 0);
+        }
 
         //Когда CurrentBlock коснулся блока или чего-то еще, он должен еще один шаг отстоять, должен быть блоком.
         //Еще один ход он может двинуться
@@ -429,14 +473,24 @@ namespace NAT.Models {
             if(mapId >= Maps.Count() || mapId < 0) throw new ArgumentException("Invalid map Index");
             var targetMap = Maps[mapId];
 
-           
-            if (MoveCurrentBlockDown(mapId)) {
+            CheckLineFalling(mapId);
+            if (CheckGameEnd()){ 
+                GameOver?.Invoke();
+                return;
+            }
+
+            if (MoveCurrentBlockDown(mapId) || Maps[mapId].CurrentBlockPassTurns != 0) {
                 //ok ..
             }else {
+                Maps[mapId].CurrentBlockPassTurns++;
+                if (Maps[mapId].CurrentBlockPassTurns < 1) return;
+
+                Maps[mapId].CurrentBlockPassTurns = 0;
                 Maps[mapId].addBlockToMap();
                 var rnd = new Random();
                 var sym = FuckingLetters.OrderBy(x => rnd.Next()).Last();
                 Maps[mapId].CurrentBlock = CreateBlock(sym);
+                CheckLineField(mapId);
             }
             
         }

@@ -7,6 +7,9 @@ using NAT.Models;
 
 namespace NAT.Models {
     public interface IGameModel {
+
+        Action GameOver { get; set; }
+
         // идентификатор текущей открытой карты
         int CurrentMapId { get; set; }
 
