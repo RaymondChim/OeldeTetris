@@ -504,12 +504,12 @@ namespace NAT.Models {
                 Score += 10;
                 Maps[mapId].CurrentBlockPassTurns++;
                 if (Maps[mapId].CurrentBlockPassTurns < 1) return;
-
                 Maps[mapId].CurrentBlockPassTurns = 0;
                 Maps[mapId].addBlockToMap();
                 var rnd = new Random();
                 var sym = FuckingLetters.OrderBy(x => rnd.Next()).Last();
-                Maps[mapId].CurrentBlock = CreateBlock('I');
+                Maps[mapId].CurrentBlock = Maps[mapId].NextBlock;
+                Maps[mapId].NextBlock = CreateBlock(sym);
                 CheckLineField(mapId);
             }
             
