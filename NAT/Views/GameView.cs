@@ -6,6 +6,7 @@ using NAT.Views;
 using System.Diagnostics;
 using System.Windows;
 using System;
+using NAT.Services;
 
 namespace NAT.Views
 {
@@ -260,6 +261,8 @@ namespace NAT.Views
             //TODO : DO
         }
 
+        public void Init(Scores scores) {
+        }
     }
 }
 

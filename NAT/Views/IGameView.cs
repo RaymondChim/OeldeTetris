@@ -5,12 +5,15 @@ using NAT.Models;
 using System.Diagnostics;
 using System.Windows;
 
+using NAT.Services;
 
 namespace NAT.Views {
     public interface IGameView {
         // событие "отрабатывающее" пи нажатии клавиши пользователем
 
         // Отображаеть модель
+        void Init(Scores scores);
+
         void Display(IGameModel _model);
         void TestDisplay();
         // тут вьюшка должна прочекать пользовательский ввод и вызвать событие если надо

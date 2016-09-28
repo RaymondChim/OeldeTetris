@@ -8,6 +8,8 @@ using NAT.Models;
 namespace NAT.Models {
     public interface IGameModel {
 
+        int Score { get; set; }
+
         Action GameOver { get; set; }
 
         // идентификатор текущей открытой карты

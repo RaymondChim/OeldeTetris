@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using NAT.Models;
+using NAT.Services;
 using NAT.Views;
 
 namespace NAT.Controllers {
@@ -20,11 +21,15 @@ namespace NAT.Controllers {
         public IGameModel _model { get; private set; }
         public IGameView _view { get; private set; }
 
+
+        public IScoreService _scoreService { get; private set; }
+
         public bool ProcessTurns { get; set; } = true;
 
         public void Init(IGameModel _model, IGameView _view) {
             this._model = _model;
             this._view = _view;
+            _scoreService = new CommonScoreService();
         }
 
         public void Render() {
@@ -33,6 +38,7 @@ namespace NAT.Controllers {
 
         public void Start() {
             _view.LoadContent();
+            _view.Init(_scoreService.GetScores());
 
             _model.GameOver += () =>{
                 _view.DisplayGameOver();

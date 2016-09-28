@@ -33,7 +33,7 @@ namespace NAT.Services {
         public Scores() { }
     }
 
-    interface IScoreService {
+    public interface IScoreService {
         Scores GetScores();
         void AddScore(Tuple<string, int> score);
     }
