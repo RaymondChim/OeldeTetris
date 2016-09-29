@@ -19,12 +19,17 @@ namespace NAT.Views
         private Texture2D sideFieldG;
         private Texture2D GLsideFieldG;
         private Texture2D tileY;
+        private Texture2D tileG;
         private Texture2D textBorderY;
         private Texture2D GLtextBorderY;
         private Texture2D sideFieldY;
         private Texture2D GLsideFieldY;
         private Texture2D fieldY;
         private Texture2D GLfieldY;
+        private Texture2D GLtileG;
+        private Texture2D GLtileY;
+        private Texture2D screenY;
+        private Texture2D screenG;
         private SpriteFont text;
         private readonly GameMain _GameMain;
         private Scores highscoreTable;
@@ -52,7 +57,7 @@ namespace NAT.Views
 
         public void LoadContent()
         {
-            background = _GameMain.Content.Load<Texture2D>("tetris_screen2");
+            background = _GameMain.Content.Load<Texture2D>("tetris_screen_test");
             textBorderY = _GameMain.Content.Load<Texture2D>("textBorderY"); 
             GLtextBorderY = _GameMain.Content.Load<Texture2D>("GLtextBorderY"); 
             sideFieldY = _GameMain.Content.Load<Texture2D>("sideFieldY"); 
@@ -65,6 +70,11 @@ namespace NAT.Views
             GLfieldG = _GameMain.Content.Load<Texture2D>("GLfieldG");
             text = _GameMain.Content.Load<SpriteFont>("text");
             tileY = _GameMain.Content.Load<Texture2D>("tileA");
+            tileG = _GameMain.Content.Load<Texture2D>("tileG");
+            GLtileY = _GameMain.Content.Load<Texture2D>("GLtileY");
+            GLtileG = _GameMain.Content.Load<Texture2D>("GLtileG");
+            screenG = _GameMain.Content.Load<Texture2D>("screenG");
+            screenY = _GameMain.Content.Load<Texture2D>("screenY");
             _GameMain.graphics.PreferredBackBufferWidth = resX;
             _GameMain.graphics.PreferredBackBufferHeight = resY;
             _GameMain.Window.Position = new Point(0, 0);
@@ -124,12 +134,15 @@ namespace NAT.Views
             Texture2D GLbackField = null;
             Texture2D frontBrick = null;
             Texture2D backBrick = null;
+            Texture2D GLfrontBrick = null;
+            Texture2D GLbackBrick = null;
             Texture2D sideFieldOn = null;
             Texture2D sideFieldOff = null;
             Texture2D GLsideFieldOn = null;
             Texture2D textFieldOn = null;
             Texture2D textFieldOff = null;
             Texture2D GLtextFieldOn = null;
+            Texture2D Screen = null;
             int backMode;
             int frontMode = _model.CurrentMapId;
             int score = _model.CurrentScore;
@@ -137,11 +150,13 @@ namespace NAT.Views
 
             if (frontMode == 1)
             {
-                frontBrick = tileY; 
-                backBrick = tileY; //plc
+                frontBrick = tileG;
+                Screen = screenG;
+                GLfrontBrick = GLtileG;
+                backBrick = tileY; 
                 frontField = fieldG;
                 GLfrontField = GLfieldY;
-                backField = fieldY; //plc
+                backField = fieldY; 
                 GLbackField = GLfieldY;// plc
                 sideFieldOn = sideFieldG;
                 GLsideFieldOn = GLsideFieldG;
@@ -154,8 +169,10 @@ namespace NAT.Views
             }
             else
             {
-                frontBrick = tileY; 
-                backBrick = tileY; //plc
+                frontBrick = tileY;
+                Screen = screenY;
+                GLfrontBrick = GLtileY;
+                backBrick = tileG; 
                 frontField = fieldY;
                 GLfrontField = GLfieldY;
                 backField = fieldG; 
@@ -169,21 +186,23 @@ namespace NAT.Views
                 _GameMain.spriteBatch.Draw(tileY, new Rectangle(1379, 275, 38, 48), Color.White); // layer marker
                 backMode = 1;
             }
+            _GameMain.spriteBatch.Draw(Screen, new Rectangle(519, 87, 680, 855), Color.White);
             var mapBack = _model.BrickMap(backMode);
             Block currentBlockFront = _model.GetCurrentBlock(frontMode);
             Block currentBlockBack = _model.GetCurrentBlock(backMode);
             //Debug.WriteLine(lenFront, "boom");
             //Вывод заднего слоя блоков
-            drawBrickMap(mapBack, tileY, backScreenOffset, backTopOffset, 0.45f);
-            drawBlock(currentBlockBack, tileY, backScreenOffset, backTopOffset, 0.45f);
+            drawBrickMap(mapBack, backBrick, backScreenOffset, backTopOffset, 0.45f);
+            drawBlock(currentBlockBack, backBrick, backScreenOffset, backTopOffset, 0.45f);
 
             //Задний стакан
             _GameMain.spriteBatch.Draw(backField, new Rectangle(backScreenOffset+resOffset + screenOffset - 7, backTopOffset+ topOffset - 6, 772 / 2, 1593 / 2), Color.White *0.45f);
             //Вывод переднего слоя блоков
-
-            drawBlock(currentBlockFront, tileY, 0, 0, 1f);
-            drawBrickMap(mapFront, tileY, 0, 0, 1f);
-
+            //519 87
+            drawBlock(currentBlockFront, frontBrick, 0, 0, 1f);
+            drawBlock(currentBlockFront, GLfrontBrick, 0, 0, 0.55f);
+            drawBrickMap(mapFront, frontBrick, 0, 0, 1f);
+            drawBrickMap(mapFront, GLfrontBrick, 0, 0, 0.55f);
             //Передний стакан
             _GameMain.spriteBatch.Draw(frontField, new Rectangle(resOffset + screenOffset - 7, topOffset - 6, 772 / 2, 1593 / 2), Color.White);
             _GameMain.spriteBatch.Draw(GLfrontField, new Rectangle(resOffset + screenOffset - 6, topOffset - 6, 772 / 2, 1593 / 2), Color.White);
@@ -195,12 +214,13 @@ namespace NAT.Views
             int phX, phY;
             phX = 959 - screenOffset - resOffset - 100;
             phY = 674 - topOffset + 25;
-            drawBlock(nextBlockBack, tileY, phX+ backScreenOffset, phY + backTopOffset, 0.45f);
-            drawBlock(nextBlockFront, tileY, phX, phY, 1f);
+            drawBlock(nextBlockBack, backBrick, phX+ backScreenOffset, phY + backTopOffset, 0.45f);
+            drawBlock(nextBlockFront, frontBrick, phX, phY, 1f);
+            drawBlock(nextBlockFront, GLfrontBrick, phX, phY, 0.55f);
 
             _GameMain.spriteBatch.Draw(sideFieldOff, new Rectangle(959 + backScreenOffset, 674 + backTopOffset, 378 / 2, 394 / 2), Color.White*0.45f);
             _GameMain.spriteBatch.Draw(sideFieldOn, new Rectangle(959, 674, 378/2, 394/2), Color.White);
-            _GameMain.spriteBatch.Draw(GLsideFieldOn , new Rectangle(959, 674, 378 / 2, 394 / 2), Color.White);
+            _GameMain.spriteBatch.Draw(GLsideFieldOn , new Rectangle(959, 674, 378 / 2, 394 / 2), Color.White*0.60f);
             DisplayScores(highscoreTable, _model);
             _GameMain.spriteBatch.End();
 
