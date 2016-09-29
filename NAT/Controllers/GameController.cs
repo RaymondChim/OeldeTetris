@@ -21,8 +21,10 @@ namespace NAT.Controllers {
         public IGameModel _model { get; private set; }
         public IGameView _view { get; private set; }
 
-
         public IScoreService _scoreService { get; private set; }
+
+        private List<Keys> IgnoreKeys  = new List<Keys>();
+        private List<Keys> PossibleIgnoreKeys = new List<Keys>() { Keys.Space , Keys.Up};
 
         public bool ProcessTurns { get; set; } = true;
 
@@ -53,9 +55,11 @@ namespace NAT.Controllers {
             _GameInputTimer += _time.ElapsedGameTime.Milliseconds;
 
             if(_GameInputTimer >= GameInputDelta) {
-                foreach (var key in _view.UpdateuserInput())
+                var input = _view.UpdateuserInput();
+                foreach (var key in input)
                     ProcessInput(key);
                 _GameInputTimer = 0;
+                IgnoreKeys = IgnoreKeys.Where(x => input.Contains(x)).ToList();
             }
 
             if (_GameTurnTimer >= GameTurnDelta) {
@@ -67,7 +71,7 @@ namespace NAT.Controllers {
         }
 
         private void ProcessInput(Keys key) {
-
+            if (IgnoreKeys.Contains(key)) return;
             if (!ProcessTurns) return;
 
             if (key == Keys.Left) _model.MoveCurrentBlock(-1, _model.CurrentMapId);
@@ -76,7 +80,9 @@ namespace NAT.Controllers {
             if (key == Keys.Down) _model.ProccessTurn(_model.CurrentMapId);
 
             if (key == Keys.Space) _model.CurrentMapId = _model.CurrentMapId == 0 ? 1 : 0;
-            
+
+            if(PossibleIgnoreKeys.Contains(key))IgnoreKeys.Add(key);
+
         }
     }
 }
