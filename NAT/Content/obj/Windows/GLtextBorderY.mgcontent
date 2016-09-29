@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/Everlating/Documents/Visual Studio 2015/Projects/NAT/NAT/Content/GLtextBorderY.png</SourceFile>
+  <SourceFile>D:/OeldeTetris-master/NAT/Content/GLtextBorderY.png</SourceFile>
   <SourceTime>2016-09-28T05:17:44+03:00</SourceTime>
-  <DestFile>C:/Users/Everlating/Documents/Visual Studio 2015/Projects/NAT/NAT/Content/bin/Windows/GLtextBorderY.xnb</DestFile>
-  <DestTime>2016-09-28T16:35:50.9785297+03:00</DestTime>
+  <DestFile>D:/OeldeTetris-master/NAT/Content/bin/Windows/GLtextBorderY.xnb</DestFile>
+  <DestTime>2016-09-28T16:06:49.5815628+03:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2016-03-30T09:36:08+03:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
