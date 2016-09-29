@@ -17,12 +17,22 @@ namespace NAT.Models {
             Ypos = _YPos;
         }
 
+        public Brick(int _XPos, int _YPos, IEnumerable<string> _Tags) {
+            Xpos = _XPos;
+            Ypos = _YPos;
+            Tags = new List<string>(_Tags);
+        }
+
 
         //deepCopy
         public Brick(Brick other_block) {
             this.Xpos = other_block.Xpos;
             this.Ypos = other_block.Ypos;
+            this.Tags = new List<string>(other_block.Tags);
         }
+
+        // для любой логики
+        public List<string> Tags { get; set; } = new List<string>();
 
     }
     // конкурс окончем

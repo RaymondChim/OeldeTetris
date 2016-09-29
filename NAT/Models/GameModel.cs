@@ -48,6 +48,7 @@ namespace NAT.Models {
         //Нумерация слева направо, сверху вниз
         public Block CreateBlock(char BlockIndex) {
             //I Z S J L T O Смотри картинку 13.png в дискорде
+            BlockIndex = 'O';
             switch (BlockIndex) {
                 case 'I':
                     Block I = new Block(new Brick[]
@@ -436,10 +437,13 @@ namespace NAT.Models {
             }
 
             for( var i = 0; i < 20; i++) {
-                var query = Maps[mapId].AllBricks.Where(x => (x.Ypos == i));
+                var query = Maps[mapId].AllBricks.Where(x => (x.Ypos == i) && !x.Tags.Contains("liquid"));
                 if(query.Count() == 10) {
                     Score += 100;
                     Maps[mapId].AllBricks.RemoveAll(x => query.Contains(x));
+                    Maps[mapId].AllBricks = Maps[mapId].AllBricks.Select(
+                        x => x.Ypos <= i ? new Brick(x.Xpos,x.Ypos,new string[]{"liquid"}) : x
+                        ).ToList();
                 }
             }
 
@@ -448,11 +452,21 @@ namespace NAT.Models {
         }
 
         private void CheckLineFalling(int mapId) {
-            for (var i = 19; i >= 0; i--) {
-                if (Maps[mapId].AllBricks.Count(x => x.Ypos == i) == 0) {
-                    Maps[mapId].AllBricks = Maps[mapId].AllBricks.Select(x => x.Ypos <= i ? new Brick(x.Xpos, x.Ypos + 1) : x).ToList();
-                }
-            }
+
+            Maps[mapId].AllBricks =
+                Maps[mapId].AllBricks
+                    .Select(x => {
+                        if (x.Tags.Contains("liquid")) {
+                            if (Maps[mapId].AllBricks.Any(y => y.Xpos == x.Xpos && y.Ypos == x.Ypos + 1 ) || x.Ypos == 19) {
+                                if (Maps[mapId].AllBricks.Any(y => y.Xpos == x.Xpos && y.Ypos == x.Ypos + 1 && !y.Tags.Contains("liquid")) || x.Ypos == 19)
+                                    x.Tags.Remove("liquid");
+                                return x;
+                            }else {
+                                return new Brick(x.Xpos, x.Ypos + 1,new string[] {"liquid"});
+                            }
+                        } else return x; })
+                    .ToList();
+
         }
 
         private bool CheckGameEnd() {
@@ -492,7 +506,8 @@ namespace NAT.Models {
             var targetMap = Maps[mapId];
 
             CheckLineFalling(mapId);
-            Debug.WriteLine(Score);
+            CheckLineField(mapId);
+
             if (CheckGameEnd()){ 
                 GameOver?.Invoke();
                 return;
@@ -510,7 +525,6 @@ namespace NAT.Models {
                 var sym = FuckingLetters.OrderBy(x => rnd.Next()).Last();
                 Maps[mapId].CurrentBlock = Maps[mapId].NextBlock;
                 Maps[mapId].NextBlock = CreateBlock(sym);
-                CheckLineField(mapId);
             }
             
         }
