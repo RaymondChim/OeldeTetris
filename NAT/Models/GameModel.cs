@@ -52,7 +52,6 @@ namespace NAT.Models {
         //Нумерация слева направо, сверху вниз
         public Block CreateBlock(char BlockIndex) {
             //I Z S J L T O Смотри картинку 13.png в дискорде
-            BlockIndex = 'O';
             switch (BlockIndex) {
                 case 'I':
                     Block I = new Block(new Brick[]
@@ -312,14 +311,6 @@ namespace NAT.Models {
                     || shape.Bricks[i].Ypos > 19
                     || shape.Bricks[i].Xpos < 0
                     || shape.Bricks[i].Xpos > 9) {
-                    #region comments
-                    //Maps[0].CurrentBlock = crutch_shape;
-                    //shape = crutch_shape;
-                    //Debug.WriteLine("Shape indexes");
-                    //for (int j = 0; j < Maps[0].CurrentBlock.Bricks.Length; j++) {
-                    //    Debug.WriteLine(Maps[0].CurrentBlock.Bricks[j].Xpos + "   " + Maps[0].CurrentBlock.Bricks[j].Ypos);
-                    //}
-                    #endregion
                     Debug.WriteLine("Can't flip shape. Border locked.");
                     return true;
                 }
@@ -404,11 +395,16 @@ namespace NAT.Models {
         public void MoveCurrentBlock(int direction, int mapId) {
             if (mapId >= Maps.Count()) throw new ArgumentException("Invalid Map Index");
             Block shape = new Block(GetCurrentBlock(mapId));
-            for (int i = 0; i < Maps[mapId].CurrentBlock.Bricks.Count(); i++) {
-                shape.Bricks[i].Xpos += direction;
+            shape.Bricks = shape.Bricks.Select(x => new Brick(x.Xpos + direction, x.Ypos)).ToArray();
+
+            if(
+                shape.Bricks.Any(x => Maps[mapId].AllBricks.Count(y => y.Xpos == x.Xpos && y.Ypos == x.Ypos) != 0) ||
+                shape.Bricks.Any(x => x.Xpos < 0 || x.Xpos > 9 || x.Ypos < 0 || x.Ypos > 19)
+                ) { } else {
+                Maps[mapId].CurrentBlock = shape;
+                shape.Bind.Xpos += direction;
             }
-            shape.Bind.Xpos += direction;
-            FlipEnable(mapId, shape);
+
         }
 
         //Block shape = new Block(GetCurrentBlock(mapId));
@@ -531,12 +527,13 @@ namespace NAT.Models {
 
             if(Maps[mapId].IsLocked) return;
 
-            if (MoveCurrentBlockDown(mapId) || Maps[mapId].CurrentBlockPassTurns != 0) {
+            if (MoveCurrentBlockDown(mapId) && Maps[mapId].CurrentBlockPassTurns == 0) {
                 //ok ..
             }else {
                 Score += 10;
                 Maps[mapId].CurrentBlockPassTurns++;
-                if (Maps[mapId].CurrentBlockPassTurns < 1) return;
+                if (Maps[mapId].CurrentBlockPassTurns < 1)
+                    return;
                 Maps[mapId].CurrentBlockPassTurns = 0;
                 Maps[mapId].addBlockToMap();
                 var rnd = new Random();
