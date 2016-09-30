@@ -48,7 +48,6 @@ namespace NAT.Models {
         //Нумерация слева направо, сверху вниз
         public Block CreateBlock(char BlockIndex) {
             //I Z S J L T O Смотри картинку 13.png в дискорде
-            BlockIndex = 'O';
             switch (BlockIndex) {
                 case 'I':
                     Block I = new Block(new Brick[]
