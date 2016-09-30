@@ -29,6 +29,10 @@ namespace NAT.Models {
 
         public Action GameOver { get; set; }
 
+        public Action<int> MapLocked {get;set;}
+
+        public Action<int> MapUnlocked {get;set;}
+
         public GameModel() {
             Score = 0;
             Maps = new Map[] { new Map(), new Map() };
@@ -48,6 +52,7 @@ namespace NAT.Models {
         //Нумерация слева направо, сверху вниз
         public Block CreateBlock(char BlockIndex) {
             //I Z S J L T O Смотри картинку 13.png в дискорде
+            BlockIndex = 'O';
             switch (BlockIndex) {
                 case 'I':
                     Block I = new Block(new Brick[]
@@ -443,6 +448,7 @@ namespace NAT.Models {
                     Maps[mapId].AllBricks = Maps[mapId].AllBricks.Select(
                         x => x.Ypos <= i ? new Brick(x.Xpos,x.Ypos,new string[]{"liquid"}) : x
                         ).ToList();
+                    SetMapLocked(true, mapId);
                 }
             }
 
@@ -465,12 +471,22 @@ namespace NAT.Models {
                             return new Brick(x.Xpos, x.Ypos + 1, new string[] { "liquid" });
                         } else return x; })
                     .ToList();
-
+            if (Maps[mapId].AllBricks.Count(x => x.Tags.Contains("liquid")) == 0)
+                SetMapLocked(false, mapId);
+            else SetMapLocked(true, mapId);
 
         }
 
         private bool CheckGameEnd() {
             return Maps.Any(x => x.AllBricks.Count(y => y.Ypos <= 1) != 0);
+        }
+
+        private void SetMapLocked(bool locked, int mapId) {
+            if(Maps[mapId].IsLocked != locked) {
+                if (locked) MapLocked?.Invoke(mapId);
+                else MapUnlocked?.Invoke(mapId);
+                Maps[mapId].IsLocked = locked;
+            }
         }
 
         //Когда CurrentBlock коснулся блока или чего-то еще, он должен еще один шаг отстоять, должен быть блоком.
@@ -512,6 +528,8 @@ namespace NAT.Models {
                 GameOver?.Invoke();
                 return;
             }
+
+            if(Maps[mapId].IsLocked) return;
 
             if (MoveCurrentBlockDown(mapId) || Maps[mapId].CurrentBlockPassTurns != 0) {
                 //ok ..

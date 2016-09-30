@@ -11,6 +11,8 @@ namespace NAT.Models {
         int Score { get; set; }
 
         Action GameOver { get; set; }
+        Action<int> MapLocked { get;set;}
+        Action<int> MapUnlocked { get; set; }
 
         // идентификатор текущей открытой карты
         int CurrentMapId { get; set; }

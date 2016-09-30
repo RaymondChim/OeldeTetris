@@ -22,5 +22,7 @@ namespace NAT.Models {
             }
                 
         }
+
+        public bool IsLocked { get; set; } = false;
     }
 }
