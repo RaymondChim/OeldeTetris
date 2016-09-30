@@ -453,18 +453,19 @@ namespace NAT.Models {
         private void CheckLineFalling(int mapId) {
 
             Maps[mapId].AllBricks =
-                Maps[mapId].AllBricks
+                Maps[mapId].AllBricks.OrderByDescending(x => x.Ypos)
                     .Select(x => {
                         if (x.Tags.Contains("liquid")) {
                             if (Maps[mapId].AllBricks.Any(y => y.Xpos == x.Xpos && y.Ypos == x.Ypos + 1 ) || x.Ypos == 19) {
-                                if (Maps[mapId].AllBricks.Any(y => y.Xpos == x.Xpos && y.Ypos == x.Ypos + 1 && !y.Tags.Contains("liquid")) || x.Ypos == 19)
+                                if (Maps[mapId].AllBricks.Any(y => y.Xpos == x.Xpos && y.Ypos == x.Ypos + 1 && !y.Tags.Contains("liquid")) || x.Ypos == 19) { 
                                     x.Tags.Remove("liquid");
-                                return x;
-                            }else {
-                                return new Brick(x.Xpos, x.Ypos + 1,new string[] {"liquid"});
+                                    return x;
+                                }
                             }
+                            return new Brick(x.Xpos, x.Ypos + 1, new string[] { "liquid" });
                         } else return x; })
                     .ToList();
+
 
         }
 
