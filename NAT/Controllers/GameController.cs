@@ -12,8 +12,10 @@ using NAT.Views;
 namespace NAT.Controllers {
     public class GameController : IGameController {
 
-        public int GameTurnDelta { get; private set; } = 500;
-        private int _GameTurnTimer = 0;
+        public int[] GameTurnDelta { get; private set; } = new int[] { 500, 500 };
+        private int[] _GameTurnTimer = new int[] {0,0};
+
+        private int minTurnDelta = 150;
 
         public int GameInputDelta { get; private set; } = 75;
         private int _GameInputTimer = 0;
@@ -46,12 +48,23 @@ namespace NAT.Controllers {
                 _view.DisplayGameOver();
                 ProcessTurns = false;
             };
+
+            _model.MapLocked += (mapId) => {
+                GameTurnDelta[mapId] = 70;
+            };
+            _model.MapUnlocked += (mapId) =>{
+                GameTurnDelta[mapId] = 500;
+            };
+
+
         }
 
         public void Update(GameTime _time) {
             if (!ProcessTurns) return;
 
-            _GameTurnTimer += _time.ElapsedGameTime.Milliseconds;
+            _GameTurnTimer[0] += _time.ElapsedGameTime.Milliseconds;
+            _GameTurnTimer[1] += _time.ElapsedGameTime.Milliseconds;
+
             _GameInputTimer += _time.ElapsedGameTime.Milliseconds;
 
             if(_GameInputTimer >= GameInputDelta) {
@@ -62,11 +75,21 @@ namespace NAT.Controllers {
                 IgnoreKeys = IgnoreKeys.Where(x => input.Contains(x)).ToList();
             }
 
-            if (_GameTurnTimer >= GameTurnDelta) {
+            if (_GameTurnTimer[0] >= GameTurnDelta[0]) {
                 _model.ProccessTurn(0);
-                _model.ProccessTurn(1);
-                _GameTurnTimer = 0;
+                _GameTurnTimer[0] = 0;
             }
+
+            if (_GameTurnTimer[1] >= GameTurnDelta[1]) {
+                _model.ProccessTurn(1);
+                _GameTurnTimer[1] = 0;
+            }
+
+            GameTurnDelta = GameTurnDelta
+            .Select(x =>
+               x < minTurnDelta ? x :
+                500 + (int)Math.Floor(Math.Sqrt(_model.CurrentScore / 1000)) < minTurnDelta ? minTurnDelta : 500 + (int)Math.Floor(Math.Sqrt(_model.CurrentScore / 30000)))
+            .ToArray();
 
         }
 
