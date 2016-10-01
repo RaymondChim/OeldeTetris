@@ -17,14 +17,14 @@ namespace NAT {
         public GraphicsDeviceManager graphics;
         public SpriteBatch spriteBatch;
 
-        public GameController _controller;
+        public TetrisGameController _controller;
 
         public GameMain() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            _controller = new GameController();
-            _controller.Init(new GameModel(), new View(this));
+            _controller = new TetrisGameController();
+            _controller.Init(new TetrisGameModel(), new View(this));
         }
 
 

@@ -10,7 +10,7 @@ using NAT.Views;
 namespace NAT.Controllers {
     interface IGameController {
         // инициализирует контроллер ( я не могу описывать конструктооры в интерфейсах да)
-        void Init(IGameModel _model, IGameView _view);
+        void Init(ITetrisGameModel _model, ITetrisGameView _view);
         // запускает игру
         void Start();
 

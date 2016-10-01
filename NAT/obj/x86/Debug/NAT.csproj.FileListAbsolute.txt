@@ -139,3 +139,9 @@ C:\Users\Artem\Desktop\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.XInp
 C:\Users\Artem\Desktop\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.RawInput.xml
 C:\Users\Artem\Desktop\OeldeTetris-master\NAT\bin\Windows\x86\Debug\SharpDX.Direct3D9.xml
 C:\Users\Artem\Desktop\OeldeTetris-master\NAT\obj\x86\Debug\NAT.csprojResolveAssemblyReference.cache
+C:\Users\Everlating\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\GLtileG.xnb
+C:\Users\Everlating\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\GLtileY.xnb
+C:\Users\Everlating\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\screenG.xnb
+C:\Users\Everlating\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\screenY.xnb
+C:\Users\Everlating\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\tetris_screen_test.xnb
+C:\Users\Everlating\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\tileG.xnb
