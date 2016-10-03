@@ -9,19 +9,20 @@ namespace NAT.Models.Race {
     public class Map {
         public List<Brick> AllBricks = new List<Brick>();
 
-        public Block CurrentBlock;
-
         public Block NextBlock;
 
-        public Block[] Walls;
+        //Все стены вместе
+        public List<Block> Walls;
 
         public int CurrentBlockPassTurns = 0;
 
+        // Расстояник между стенками 4 клетки
+        // Добавление следующей стенки на карту
         public void addBlockToMap() {
-            for(int i = 0; i < 4; i++) {
-                Debug.WriteLine("Block to Map index " + i + ": " + CurrentBlock.Bricks[i].Xpos + " " + CurrentBlock.Bricks[i].Ypos);
-                AllBricks.Add(CurrentBlock.Bricks[i]);
+            foreach (Brick br in NextBlock.Bricks) {
+                AllBricks.Add(br);
             }
+            Walls.Add(NextBlock);
         }
 
         public void addCarToMap(Car Ferrari) {

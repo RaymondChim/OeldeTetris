@@ -16,7 +16,8 @@ namespace NAT.Models.Race {
 
         //deepCopy
         public Car(Car other_car) {
-            this.Bricks = other_car.Bricks;
+            for (int i = 0; i < Bricks.Length; i++) 
+                this.Bricks[i] = other_car.Bricks[i];
             this.mapId = other_car.mapId;
         }
     }

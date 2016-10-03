@@ -65,8 +65,9 @@ namespace NAT.Models {
             Maps = new Race.Map[] { new Race.Map(), new Race.Map() };
         }
 
+        //Использовать Maps[mapId].NextBlock && addBlockToMap() 
         public void AddNewWall(int mapId) {
-
+            
         }
 
         public Brick[] GetMap(int mapId) {
@@ -91,24 +92,33 @@ namespace NAT.Models {
 
         //Добавить проверку коллизий и не только
         public void MoveCar(int direction) {
-            
+            if (direction != -1 || direction != 1 ) throw new ArgumentException("Invalid direction value");
+            if (StopMove(direction)) return;
+            Car Lamborghini = new Car(Ferrari); //Ламбо для пацанов
+
+            foreach (Brick br in Lamborghini.Bricks) {
+                br.Xpos += direction; //Если что-то не работает, то смотри deepcopy
+            }
+
+            if (CheckColision(Lamborghini.mapId, Lamborghini)) return;
+            Ferrari = Lamborghini;
         }
 
         public bool StopMove(int direction) {
             foreach (Brick br in Ferrari.Bricks) {
                 if ((br.Xpos == 0 && direction == -1) || (br.Xpos == 9 && direction == 1)) {
                     return true;
-                } 
+                }
             }
             return false;
         }
 
         //Вроде работает
-        public bool CheckColision(int mapId) {
+        public bool CheckColision(int mapId, Car Lamborghini) {
             const int Harlamov = 17;
             foreach (Brick br in Maps[mapId].AllBricks) {
                 if (br.Ypos >= Harlamov) {
-                    foreach (Brick carbr in Ferrari.Bricks) {
+                    foreach (Brick carbr in Lamborghini.Bricks) {
                         if (carbr.Xpos == br.Xpos && carbr.Ypos == br.Ypos) {
                             return true;
                         }
@@ -118,9 +128,10 @@ namespace NAT.Models {
             return false;
         }
 
-        // TODO: Переписать
         // TODO: Проверить это говно (обожаю лямбды)
-        public void MoveBlockDown(int mapId) {
+        // TODO: Переписать
+        // TODO: Точно переписать
+        /*public void MoveBlockDown(int mapId) {
             if (mapId >= Maps.Count()) throw new ArgumentException("Invalid Map Index");
             for (int i = 0; i < Maps[mapId].Walls.Length; i++) {
                 for (int j = 0; j < Maps[mapId].Walls[i].Bricks.Length; j++) {
@@ -131,7 +142,7 @@ namespace NAT.Models {
                     Maps[mapId].Walls[i].Bricks[j].Ypos++;
                 }
             }
-        }
+        }*/
 
         public void ProcessTurn(int mapId) {
 
