@@ -7,7 +7,8 @@ using NAT.Models.Race;
 
 namespace NAT.Models {
     public interface IRaceGameModel {
-        
+
+        int Score { get; set; }
         // id блять карты на которой находится машинка
         int CarMapId { get; set; }
 
@@ -21,7 +22,7 @@ namespace NAT.Models {
         Car MainCar { get; }
 
         // обработать ход , те машинку вперед , просчитать коллизию и тд
-        void ProcessTurn();
+        void ProcessTurn(int mapId);
 
         // сдвинуть машину по X на direction
         void MoveCar(int direction);
