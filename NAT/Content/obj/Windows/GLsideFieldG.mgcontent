@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>C:/Users/Artem/Desktop/OeldeTetris-master/NAT/Content/GLsideFieldG.png</SourceFile>
-  <SourceTime>2016-09-30T03:18:22+03:00</SourceTime>
+  <SourceTime>2016-10-01T11:01:26+03:00</SourceTime>
   <DestFile>C:/Users/Artem/Desktop/OeldeTetris-master/NAT/Content/bin/Windows/GLsideFieldG.xnb</DestFile>
-  <DestTime>2016-09-30T13:42:40.3616292+03:00</DestTime>
+  <DestTime>2016-10-04T14:59:26.5654022+03:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2016-03-30T09:36:08+03:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
