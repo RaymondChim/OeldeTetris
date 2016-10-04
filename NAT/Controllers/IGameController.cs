@@ -8,15 +8,14 @@ using NAT.Models;
 using NAT.Views;
 
 namespace NAT.Controllers {
-    interface IGameController {
+    public interface IGameController {
         // инициализирует контроллер ( я не могу описывать конструктооры в интерфейсах да)
-        void Init(ITetrisGameModel _model, ITetrisGameView _view);
+        void Init(IModel _model, IView _view);
         // запускает игру
         void Start();
 
         // обновляет все это барахло, следует вызывать в глобальном update
         void Update(GameTime _time);
-
         // вызывает отрисовку вьюшки
         void Render();
     }
