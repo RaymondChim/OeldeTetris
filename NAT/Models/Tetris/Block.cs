@@ -13,6 +13,7 @@ namespace NAT.Models {
         public char BlockIndex; //I Z S J L T O  //Имя фигуры
 
         public int BindBlockIndex;
+        private Brick[] brick;
 
         public Block(Brick[] _Bricks, char BlockIndex, Brick Bind, int _bindBlock = 0) {
             Bricks = _Bricks;
@@ -32,5 +33,9 @@ namespace NAT.Models {
             this.BlockIndex = other_block.BlockIndex;
         }
 
+        public Block(Brick[] brick)
+        {
+            this.brick = brick;
+        }
     }
 }

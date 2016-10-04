@@ -7,7 +7,7 @@ using NAT.Models.Race;
 
 namespace NAT.Models {
     class RaceGameModel {
-
+        public int gap = 0;
         public Race.Map[] Maps;
         public Car Ferrari;             //Потому что Ferrari для пиздатых мужиков
         public int Score { get; set; }
@@ -35,13 +35,19 @@ namespace NAT.Models {
             Maps[Ferrari.mapId].addCarToMap(Ferrari);
         }
 
-        // TODO: Проверить вхождение в стену при переходе на новую карту
+        // TODO: Посмотреть Роберту
         public void ChangeCarMap() {
             if (Ferrari.mapId >= 2) throw new ArgumentException("Invalid Map Index");
             int[] id = { 1, 0 }; //Многоходовочка
             DeleteCarFromMap(Ferrari.mapId);
             Ferrari.mapId = id[Ferrari.mapId];
             Maps[Ferrari.mapId].addCarToMap(Ferrari);
+
+            //РОБЕРТ ПОСМОТРИ СЮДА
+            if (CheckColision(Ferrari.mapId, Ferrari))
+            {
+                GameOver?.Invoke();
+            }
         }
 
         //Может не работать
@@ -56,18 +62,40 @@ namespace NAT.Models {
                         }
                     }
                 }
-                    
             }
         }
 
         public RaceGameModel(int Score) {
             this.Score = Score;
+            Ferrari = new Car(new Brick[]  {new Brick(5, 17),
+                                                 new Brick(4, 18),
+                                                 new Brick(5, 18),
+                                                 new Brick(6, 18),
+                                                 new Brick(4, 19),
+                                                 new Brick(6, 19)},
+                                                 0);
             Maps = new Race.Map[] { new Race.Map(), new Race.Map() };
+            Maps[Ferrari.mapId].addCarToMap(Ferrari);
         }
 
-        //Использовать Maps[mapId].NextBlock && addBlockToMap() 
+        //Использовать Maps[mapId].NextBlock && addBlockToMap()
+        //проверить
         public void AddNewWall(int mapId) {
-            
+            const int EMPTY_BRICS_IN_WALL = 3;
+            const int AMOUNT_BRICKS_IN_WALL = 7;
+            Random rand = new Random();
+            int FirstEmptyCell = rand.Next(AMOUNT_BRICKS_IN_WALL);
+            Maps[mapId].NextBlock = new Race.Block(new Brick[7]);
+            int j = 0;
+            for (int i = 0; i < 7; i++) {
+                if(FirstEmptyCell == i) {
+                    j += EMPTY_BRICS_IN_WALL;
+                } else {
+                    j++;
+                }
+                Maps[mapId].NextBlock.Bricks[i] = new Brick(j, 0);
+            }
+            Maps[mapId].addBlockToMap();
         }
 
         public Brick[] GetMap(int mapId) {
@@ -99,7 +127,6 @@ namespace NAT.Models {
             foreach (Brick br in Lamborghini.Bricks) {
                 br.Xpos += direction; //Если что-то не работает, то смотри deepcopy
             }
-
             if (CheckColision(Lamborghini.mapId, Lamborghini)) return;
             Ferrari = Lamborghini;
         }
@@ -128,24 +155,41 @@ namespace NAT.Models {
             return false;
         }
 
-        // TODO: Проверить это говно (обожаю лямбды)
-        // TODO: Переписать
-        // TODO: Точно переписать
-        /*public void MoveBlockDown(int mapId) {
+        // TODO: Проверить
+        public void MoveBlockDown(int mapId) {
             if (mapId >= Maps.Count()) throw new ArgumentException("Invalid Map Index");
-            for (int i = 0; i < Maps[mapId].Walls.Length; i++) {
-                for (int j = 0; j < Maps[mapId].Walls[i].Bricks.Length; j++) {
-                    if ((Maps[mapId].Walls[i].Bricks[j].Ypos + 1) > 19) {
-                        Maps[mapId].AllBricks.RemoveAll(x => Maps[mapId].AllBricks.Contains(Maps[mapId].Walls[i].Bricks[j]));
+            for (int i = 0; i < Maps[mapId].Walls.Count(); i++) {
+                foreach (Brick br in Maps[mapId].Walls[i].Bricks) {
+                    if (br.Ypos + 1 <= 19) {
+                        br.Ypos++;
+                    } else {
+                        Maps[mapId].Walls.RemoveAt(i);
                         break;
                     }
-                    Maps[mapId].Walls[i].Bricks[j].Ypos++;
                 }
             }
-        }*/
+        }
 
         public void ProcessTurn(int mapId) {
+            if (mapId >= Maps.Count()) throw new ArgumentException("Invalid Map Index");
 
+            /*if (CheckGameEnd())
+            {
+                GameOver?.Invoke();
+                return;
+            }*/
+            if (!CheckColision(mapId, Ferrari)) {
+                //Play
+                Score += 10;
+                MoveBlockDown(mapId);
+                if(gap == 4) {
+                    gap = 0;
+                    AddNewWall(mapId);
+                } else {
+                    gap++;
+                }
+
+            }
         }
     }
 }

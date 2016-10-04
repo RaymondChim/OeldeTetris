@@ -8,7 +8,7 @@ using System.Diagnostics;
 namespace NAT.Models.Race {
     //ну блок это массив Brick невероятно правда?
     public class Block {
-        public Brick[] Bricks { get; set; } = new Brick[10];
+        public Brick[] Bricks { get; set; } = new Brick[7];
 
         public Block(Brick[] Bricks) {
             this.Bricks = Bricks;
