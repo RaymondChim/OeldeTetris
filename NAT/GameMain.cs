@@ -9,6 +9,7 @@ using NAT.Controllers;
 using NAT.Models;
 using NAT.Views;
 
+
 namespace NAT {
     /// <summary>
     /// This is the main type for your game.
@@ -19,12 +20,21 @@ namespace NAT {
 
         public TetrisGameController _controller;
 
+        GifAnimation.GifAnimation anime;
+
+        ControllerSenpai senpai;
+
         public GameMain() {
+
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
             _controller = new TetrisGameController();
             _controller.Init(new TetrisGameModel(), new View(this));
+
+            senpai = new ControllerSenpai(new List<Tuple<string, IGameController>>()
+                { new Tuple<string, IGameController>("tetris",_controller) }
+            );
         }
 
 
@@ -46,8 +56,11 @@ namespace NAT {
         /// </summary>
         protected override void LoadContent() {
             // Create a new SpriteBatch, which can be used to draw textures.
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            _controller.Start();
+            senpai.SetControllerActive("tetris", true);
+            senpai.Start(ControllerSenpai.AnySelector);
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -67,7 +80,9 @@ namespace NAT {
         protected override void Update(GameTime gameTime) {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            _controller.Update(gameTime);
+            senpai.Update(gameTime, ControllerSenpai.ActiveSelector);
+
+            anime.Play();
 
             // TODO: Add your update logic here
             base.Update(gameTime);
@@ -80,7 +95,14 @@ namespace NAT {
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.DimGray);
             // TODO: Add your drawing code here
-            _controller.Render();
+            //_controller.Render();
+
+
+            senpai.Render(ControllerSenpai.ActiveSelector);
+
+            spriteBatch.Begin();
+            spriteBatch.Draw(anime.GetTexture(), new Rectangle(0, 0, 400, 400), Color.White);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
