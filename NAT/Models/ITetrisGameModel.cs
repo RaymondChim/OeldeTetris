@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using NAT.Models;
 
 namespace NAT.Models {
-    public interface ITetrisGameModel {
+    public interface ITetrisGameModel : IModel {
 
         int Score { get; set; }
 

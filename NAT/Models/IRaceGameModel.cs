@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using NAT.Models.Race;
 
 namespace NAT.Models {
-    public interface IRaceGameModel {
+    public interface IRaceGameModel : IModel {
 
         //id карты лежит в машине, машина умная!
         Car Ferrari { get; set; } 
