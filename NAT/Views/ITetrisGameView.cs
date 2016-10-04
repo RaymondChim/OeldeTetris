@@ -8,7 +8,7 @@ using System.Windows;
 using NAT.Services;
 
 namespace NAT.Views {
-    public interface ITetrisGameView {
+    public interface ITetrisGameView : IView {
         // событие "отрабатывающее" пи нажатии клавиши пользователем
 
         // Отображаеть модель

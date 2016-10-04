@@ -8,7 +8,7 @@ using NAT.Models;
 using NAT.Services;
 
 namespace NAT.Views {
-    public interface IRaceGameView {
+    public interface IRaceGameView : IView {
 
         // запомни шоры
         void Init(Scores scores);
