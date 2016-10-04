@@ -8,9 +8,10 @@ using NAT.Models.Race;
 namespace NAT.Models {
     public interface IRaceGameModel {
 
+        //id карты лежит в машине, машина умная!
+        Car Ferrari { get; set; } 
+
         int Score { get; set; }
-        // id блять карты на которой находится машинка
-        int CarMapId { get; set; }
 
         // событие на конец игры
         Action GameEnd { get; set; }
@@ -26,6 +27,9 @@ namespace NAT.Models {
 
         // сдвинуть машину по X на direction
         void MoveCar(int direction);
+
+        //Поменять карту на которой находится машинка
+        void ChangeCarMap();
 
     }
 }

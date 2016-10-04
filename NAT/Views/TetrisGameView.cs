@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
 using NAT.Models;
 using NAT.Views;
@@ -13,6 +14,7 @@ namespace NAT.Views
 {
     class View : ITetrisGameView
     {
+        private SoundEffect booting;
         private Texture2D background;
         private Texture2D fieldG;
         private Texture2D GLfieldG;
@@ -30,7 +32,10 @@ namespace NAT.Views
         private Texture2D GLtileY;
         private Texture2D screenY;
         private Texture2D screenG;
+        private Texture2D gameoverMsg;
         private SpriteFont text;
+        private Color yel = new Color(0xff, 0xcb, 0x28);
+        private Color grn = new Color(0x24,0xff,0x51);
         private readonly GameMain _GameMain;
         private Scores highscoreTable;
         //Разрешение
@@ -45,6 +50,7 @@ namespace NAT.Views
         //Блок "Зачем это нужно?"
         private int sizeModifier = 1;
         private int modeTest = 0;
+        private bool tehEnd = false;
         //Эмпирическией размер кирпичей
         private int brickSizeX = 37;
         private int brickSizeY = 39;
@@ -75,6 +81,8 @@ namespace NAT.Views
             GLtileG = _GameMain.Content.Load<Texture2D>("GLtileG");
             screenG = _GameMain.Content.Load<Texture2D>("screenG");
             screenY = _GameMain.Content.Load<Texture2D>("screenY");
+            gameoverMsg = _GameMain.Content.Load<Texture2D>("gmvr");
+            booting = _GameMain.Content.Load<SoundEffect>("start");
             _GameMain.graphics.PreferredBackBufferWidth = resX;
             _GameMain.graphics.PreferredBackBufferHeight = resY;
             _GameMain.Window.Position = new Point(0, 0);
@@ -85,41 +93,11 @@ namespace NAT.Views
         public void TestDisplay()
         {
             // 77.5 x 77.5 - cube or 37.2 x 37.2 
-            // Я пишу топорный костыль, потом нужно пересчитывать в зависимости от разрешения
-            /*
-            _GameMain.GraphicsDevice.Clear(Color.White);
-            _GameMain.spriteBatch.Begin();
-            _GameMain.spriteBatch.Draw(background, new Rectangle(0, 0, 1920, 1080), new Rectangle(69,79,593,558), Color.White);
-            _GameMain.spriteBatch.Draw(red, new Rectangle(resOffset + screenOffset, topOffset, 37, 37), Color.White);
-            _GameMain.spriteBatch.Draw(red, new Rectangle(resOffset + screenOffset + 37, topOffset + 37, 37, 37), Color.White);
-            _GameMain.spriteBatch.Draw(red, new Rectangle(resOffset + screenOffset + 37 * 2, topOffset + 37 * 2, 37, 37), Color.White);
-            _GameMain.spriteBatch.Draw(red, new Rectangle(resOffset + screenOffset + 37 * 3, topOffset + 37 * 3, 37, 37), Color.White);
-            _GameMain.spriteBatch.Draw(red, new Rectangle(resOffset + screenOffset + 37 * 4, topOffset + 37 * 4, 37, 37), Color.White);
-            _GameMain.spriteBatch.Draw(red, new Rectangle(resOffset + screenOffset + 37 * 5, topOffset + 37 * 5, 37, 37), Color.White);
-            _GameMain.spriteBatch.Draw(red, new Rectangle(resOffset + screenOffset + 37 * 6, topOffset + 37 * 6, 37, 37), Color.White);
-            _GameMain.spriteBatch.Draw(red, new Rectangle(resOffset + screenOffset + 37 * 7, topOffset + 37 * 7, 37, 37), Color.White);
-            _GameMain.spriteBatch.Draw(red, new Rectangle(resOffset + screenOffset + 37 * 8, topOffset + 37 * 8, 37, 37), Color.White);
-            _GameMain.spriteBatch.Draw(red, new Rectangle(resOffset + screenOffset + 37 * 9, topOffset + 37 * 9, 37, 37), Color.White);
-            _GameMain.spriteBatch.DrawString(text, "Score", new Vector2(963, 153), Color.Black);
-            _GameMain.spriteBatch.DrawString(text, "Speed", new Vector2(963, 277), Color.Black);
-            
-            if (modeTest == 1)
-            { _GameMain.spriteBatch.Draw(red, new Rectangle(1379, 174, 38, 48), Color.White); }
-            else
-            { _GameMain.spriteBatch.Draw(red, new Rectangle(1379, 275, 38, 48), Color.White); }*/
-            MouseState mouseState = Mouse.GetState();
-            Vector2 coor = new Vector2(mouseState.X, mouseState.Y);
-            //_GameMain.spriteBatch.Draw(loader, coor, Color.White);
-            var x = Keyboard.GetState();
-            var b = x.GetPressedKeys();
-            //foreach (Keys e in b) { Debug.WriteLine(e); }
 
-            _GameMain.spriteBatch.DrawString(text, Mouse.GetState().Position.ToString(), new Vector2(50, 50), Color.Black);
-            //_GameMain.spriteBatch.DrawString(text, sizeModifier.ToString(), new Vector2(100, 100), Color.Black);
-            _GameMain.spriteBatch.End();
         }
         public void Init(Scores scores) {
             highscoreTable = scores;
+            //booting.Play(0.35f,0f,0f);
         }
         public void Display(ITetrisGameModel _model)
         {
@@ -143,6 +121,8 @@ namespace NAT.Views
             Texture2D textFieldOff = null;
             Texture2D GLtextFieldOn = null;
             Texture2D Screen = null;
+            Color backColor, frontColor;
+
             int backMode;
             int frontMode = _model.CurrentMapId;
             int score = _model.CurrentScore;
@@ -150,6 +130,8 @@ namespace NAT.Views
 
             if (frontMode == 1)
             {
+                backColor = yel;
+                frontColor = grn;
                 frontBrick = tileG;
                 Screen = screenG;
                 GLfrontBrick = GLtileG;
@@ -169,6 +151,8 @@ namespace NAT.Views
             }
             else
             {
+                backColor = grn;
+                frontColor = yel;
                 frontBrick = tileY;
                 Screen = screenY;
                 GLfrontBrick = GLtileY;
@@ -218,10 +202,21 @@ namespace NAT.Views
             drawBlock(nextBlockFront, frontBrick, phX, phY, 1f);
             drawBlock(nextBlockFront, GLfrontBrick, phX, phY, 0.55f);
 
+            DisplayScores(highscoreTable, _model, 969 + backScreenOffset+7, 441 + backTopOffset, backColor * 0.20f);
+
+            _GameMain.spriteBatch.Draw(sideFieldOff, new Rectangle(959 + backScreenOffset, 674 + backTopOffset-245, 378 / 2, 394 / 2), Color.White * 0.45f);
+            _GameMain.spriteBatch.Draw(sideFieldOn, new Rectangle(959, 674-245, 378 / 2, 394 / 2), Color.White);
+            _GameMain.spriteBatch.Draw(GLsideFieldOn, new Rectangle(959, 674-245, 378 / 2, 394 / 2), Color.White * 0.60f);
+            DisplayScores(highscoreTable, _model, 969 + 7, 441, frontColor);
+           
             _GameMain.spriteBatch.Draw(sideFieldOff, new Rectangle(959 + backScreenOffset, 674 + backTopOffset, 378 / 2, 394 / 2), Color.White*0.45f);
             _GameMain.spriteBatch.Draw(sideFieldOn, new Rectangle(959, 674, 378/2, 394/2), Color.White);
             _GameMain.spriteBatch.Draw(GLsideFieldOn , new Rectangle(959, 674, 378 / 2, 394 / 2), Color.White*0.60f);
-            DisplayScores(highscoreTable, _model);
+        
+
+            if (tehEnd) {
+                _GameMain.spriteBatch.Draw(fieldY, new Rectangle(618, 426, 201, 100), Color.White);
+            }
             _GameMain.spriteBatch.End();
 
         }
@@ -246,16 +241,12 @@ namespace NAT.Views
             }
         }
 
-        public void DisplayScores(Scores scores, ITetrisGameModel _model) {
-            int startX = 969, startY = 441;
+        public void DisplayScores(Scores scores, ITetrisGameModel _model, int startX, int startY, Color color) {
             var scoreArray = scores.Heaver.Union(new ScoreHeaver[] { new ScoreHeaver("XXX",_model.CurrentScore)}).OrderByDescending(x => x.Score).Take(10).ToList();
             for (int i = 0; i < scoreArray.Count() ; i++) {
-                _GameMain.spriteBatch.DrawString(text, scoreArray[i].Name + "    " + scoreArray[i].Score, new Vector2(startX, startY + 15 * i), Color.Black);
+                _GameMain.spriteBatch.DrawString(text, scoreArray[i].Name + "    " + scoreArray[i].Score, new Vector2(startX, startY + 17 * i), color);
             }
-            /*
-            for (int i = 0; i < 10; i++) {
-                _GameMain.spriteBatch.DrawString(text, "Score", new Vector2(startX, startY+15*i), Color.Black);
-            }*/
+
             
  //969 441
         }
@@ -267,7 +258,7 @@ namespace NAT.Views
         }
 
         public void DisplayGameOver() {
-            //TODO : DO
+            tehEnd = true;
         }
 
     }

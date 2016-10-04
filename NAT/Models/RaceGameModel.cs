@@ -9,17 +9,8 @@ namespace NAT.Models {
     class RaceGameModel {
         public int gap = 0;
         public Race.Map[] Maps;
-        public Car Ferrari;             //Потому что Ferrari для пиздатых мужиков
+        public Car Ferrari { get; set; } //Потому что Ferrari для пиздатых мужиков
         public int Score { get; set; }
-        private int _CarMapId = 0;
-        public int CarMapId {
-            get {
-                return _CarMapId;
-            }
-            set {
-                _CarMapId = value;
-            }
-        }
 
         public RaceGameModel() {
             Score = 0;
@@ -35,19 +26,13 @@ namespace NAT.Models {
             Maps[Ferrari.mapId].addCarToMap(Ferrari);
         }
 
-        // TODO: Посмотреть Роберту
         public void ChangeCarMap() {
             if (Ferrari.mapId >= 2) throw new ArgumentException("Invalid Map Index");
             int[] id = { 1, 0 }; //Многоходовочка
             DeleteCarFromMap(Ferrari.mapId);
             Ferrari.mapId = id[Ferrari.mapId];
+            
             Maps[Ferrari.mapId].addCarToMap(Ferrari);
-
-            //РОБЕРТ ПОСМОТРИ СЮДА
-            if (CheckColision(Ferrari.mapId, Ferrari))
-            {
-                GameOver?.Invoke();
-            }
         }
 
         //Может не работать
@@ -173,6 +158,11 @@ namespace NAT.Models {
         public void ProcessTurn(int mapId) {
             if (mapId >= Maps.Count()) throw new ArgumentException("Invalid Map Index");
 
+
+            if (CheckColision(Ferrari.mapId, Ferrari)) {
+                GameOver?.Invoke();
+                return;
+            }
             /*if (CheckGameEnd())
             {
                 GameOver?.Invoke();
