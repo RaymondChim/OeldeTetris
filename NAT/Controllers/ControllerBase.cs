@@ -64,6 +64,7 @@ namespace NAT.Controllers {
                x < minTurnDelta ? x :
                 startTurnDelta - (int)Math.Floor(Math.Sqrt(_model.CurrentScore / 15000)) < minTurnDelta ? minTurnDelta : startTurnDelta - (int)Math.Floor(Math.Sqrt(_model.CurrentScore / 15000)))
             .ToArray();
+            GameInputDelta = 75 - (int)Math.Floor(Math.Sqrt(_model.CurrentScore / 15000)) < 5 ? 5 : 75 - (int)Math.Floor(Math.Sqrt(_model.CurrentScore / 15000));
         }
 
         protected abstract void ProcessInput(Keys key);
