@@ -20,8 +20,6 @@ namespace NAT {
 
         public TetrisGameController _controller;
 
-        GifAnimation.GifAnimation anime;
-
         ControllerSenpai senpai;
 
         public GameMain() {
@@ -82,8 +80,6 @@ namespace NAT {
                 Exit();
             senpai.Update(gameTime, ControllerSenpai.ActiveSelector);
 
-            anime.Play();
-
             // TODO: Add your update logic here
             base.Update(gameTime);
         }
@@ -99,11 +95,6 @@ namespace NAT {
 
 
             senpai.Render(ControllerSenpai.ActiveSelector);
-
-            spriteBatch.Begin();
-            spriteBatch.Draw(anime.GetTexture(), new Rectangle(0, 0, 400, 400), Color.White);
-            spriteBatch.End();
-
             base.Draw(gameTime);
         }
     }

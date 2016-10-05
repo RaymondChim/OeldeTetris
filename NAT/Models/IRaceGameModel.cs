@@ -11,8 +11,6 @@ namespace NAT.Models {
         //id карты лежит в машине, машина умная!
         Car Ferrari { get; set; } 
 
-        int Score { get; set; }
-
         // событие на конец игры
         Action GameEnd { get; set; }
 

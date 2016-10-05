@@ -10,15 +10,9 @@ using NAT.Services;
 namespace NAT.Views {
     public interface IRaceGameView : IView {
 
-        // запомни шоры
-        void Init(Scores scores);
 
         // нарисуй!
         void Display(IRaceGameModel _model);
-
-        Keys[] UpdateuserInput();
-
-        void LoadContent();
 
         void DisplayGameOver();
 
