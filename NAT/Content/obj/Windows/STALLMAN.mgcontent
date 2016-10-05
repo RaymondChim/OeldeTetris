@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SourceFile>C:/Users/Everlating/documents/visual studio 2015/Projects/NAT/NAT/Content/STALLMAN.gif</SourceFile>
+  <SourceTime>2016-10-04T20:02:18.7996002+03:00</SourceTime>
+  <DestFile>C:/Users/Everlating/documents/visual studio 2015/Projects/NAT/NAT/Content/bin/Windows/STALLMAN.xnb</DestFile>
+  <DestTime>2016-10-04T20:48:09.9448067+03:00</DestTime>
+  <Importer>GifAminationImporter</Importer>
+  <ImporterTime>2016-10-04T20:47:23.813812+03:00</ImporterTime>
+  <Processor>GifAnimationProcessor</Processor>
+  <ProcessorTime>2016-10-04T20:47:23.813812+03:00</ProcessorTime>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

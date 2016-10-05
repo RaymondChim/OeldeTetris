@@ -283,3 +283,8 @@
 /processorParam:Quality=Best
 /build:start.wav
 
+#begin booting_yellow_с.avi
+/importer:H264Importer
+/processor:VideoProcessor
+/build:booting_yellow_с.avi
+
