@@ -12,12 +12,10 @@ namespace NAT.Models.Race {
         public Block NextBlock;
 
         //Все стены вместе
-        public List<Block> Walls;
+        public List<Block> Walls = new List<Block>();
 
         public int CurrentBlockPassTurns = 0;
 
-        // Расстояник между стенками 4 клетки
-        // Добавление следующей стенки на карту
         public void addBlockToMap() {
             foreach (Brick br in NextBlock.Bricks) {
                 AllBricks.Add(br);
