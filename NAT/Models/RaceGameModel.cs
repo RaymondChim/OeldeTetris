@@ -65,16 +65,17 @@ namespace NAT.Models {
 
 
         public void AddNewWall(int mapId) {
-            if (counter[mapId] == 6) {
+            if (counter[mapId] == 4) {
                 gap[mapId] -= 4;
             }
-            if (counter[mapId] == 7 && Ferrari.mapId == mapId) {
+            if (counter[mapId] == 5 && Ferrari.mapId == mapId) {
                 Maps[mapId].NextBlock = new Race.Block(new Brick[10]);
                 for (int i = 0; i < 10; i++) {
                     Maps[mapId].NextBlock.Bricks[i] = new Brick(i, 0);
                 }
                 Maps[mapId].addBlockToMap();
-                counter[mapId] = 0;
+                counter[0] = 0;
+                counter[1] = 0;
                 return;
             }
 
