@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using NAT.Models;
 
 namespace NAT.Models {
-    public interface ITetrisGameModel : IModel {
+    public interface ITetrisGameModel {
 
         int Score { get; set; }
 
@@ -18,6 +18,7 @@ namespace NAT.Models {
         int CurrentMapId { get; set; }
 
         // набранный счет
+        int CurrentScore { get; }
 
         // "запеченная" карты карты :)
         Brick[] BrickMap(int mapId);

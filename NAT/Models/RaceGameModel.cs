@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using NAT.Models.Race;
 
 namespace NAT.Models {
-    class RaceGameModel  {
+    class RaceGameModel {
         public int gap = 0;
         public Race.Map[] Maps;
         public Car Ferrari { get; set; } //Потому что Ferrari для пиздатых мужиков
