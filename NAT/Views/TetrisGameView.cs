@@ -12,7 +12,7 @@ using System.Windows;
 using System;
 namespace NAT.Views
 {
-    class View : ITetrisGameView
+    class View : IView
     {
         //Глобальный контент
         private SoundEffect booting;

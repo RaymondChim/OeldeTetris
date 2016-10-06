@@ -200,7 +200,7 @@ namespace NAT.Models {
             if (mapId >= Maps.Count()) throw new ArgumentException("Invalid Map Index");
 
             if (CheckColision(Ferrari.mapId, Ferrari)) {
-                //GameEnd?.Invoke();
+                GameEnd?.Invoke();
                 return;
             }
             if (!CheckColision(mapId, Ferrari)) {

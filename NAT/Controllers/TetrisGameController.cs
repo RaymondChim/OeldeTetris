@@ -10,12 +10,19 @@ using NAT.Services;
 using NAT.Views;
 
 namespace NAT.Controllers {
-    public class TetrisGameController : ControllerBase<ITetrisGameModel,ITetrisGameView>, IGameController {
+    public class TetrisGameController : ControllerBase<ITetrisGameModel,IView>, IGameController {
 
-        private List<Keys> PossibleIgnoreKeys {
-            get {
-                return new List<Keys>() { Keys.Space , Keys.Up};
-            } }
+        public override int[] GameTurnDelta { get; protected set; } = new int[] { 500, 500 };
+        public override int GameInputDelta { get; protected set; } = 75;
+
+        protected override int minTurnDelta { get; set; } = 100;
+        protected override int startTurnDelta { get; set; } = 500;
+
+        protected override int GameTurnDecreaseIndex { get; set; } = 15000;
+        protected override int GameInputDecreaseIndex { get; set; } = 8000;
+
+
+        private List<Keys> PossibleIgnoreKeys {get;} = new List<Keys>() { Keys.Space, Keys.Up };
 
         public bool ProcessTurns { get; set; } = true;
 

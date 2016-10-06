@@ -18,7 +18,8 @@ namespace NAT {
         public GraphicsDeviceManager graphics;
         public SpriteBatch spriteBatch;
 
-        public TetrisGameController _controller;
+        public TetrisGameController _tetrisController;
+        public RaceGameController _raceController;
 
         ControllerSenpai senpai;
 
@@ -27,12 +28,21 @@ namespace NAT {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            _controller = new TetrisGameController();
-            _controller.Init(new TetrisGameModel(), new View(this));
+            _tetrisController = new TetrisGameController();
+            _raceController = new RaceGameController();
+            var view = new View(this);
+
+            _tetrisController.Init(new TetrisGameModel(), view);
+            _raceController.Init(new RaceGameModel(), view);
+
 
             senpai = new ControllerSenpai(new List<Tuple<string, IGameController>>()
-                { new Tuple<string, IGameController>("tetris",_controller) }
+                {
+                    new Tuple<string, IGameController>("tetris",_tetrisController),
+                    new Tuple<string, IGameController>("race",_raceController)
+                }
             );
+
         }
 
 
@@ -56,7 +66,7 @@ namespace NAT {
             // Create a new SpriteBatch, which can be used to draw textures.
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            senpai.SetControllerActive("tetris", true);
+            senpai.SetControllerActive("race", true);
             senpai.Start(ControllerSenpai.AnySelector);
 
             // TODO: use this.Content to load your game content here
@@ -92,7 +102,6 @@ namespace NAT {
             GraphicsDevice.Clear(Color.DimGray);
             // TODO: Add your drawing code here
             //_controller.Render();
-
 
             senpai.Render(ControllerSenpai.ActiveSelector);
             base.Draw(gameTime);

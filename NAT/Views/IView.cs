@@ -17,5 +17,7 @@ namespace NAT.Views {
 
         void Display(IModel _model);
 
+        void DisplayGameOver();
+
     }
 }

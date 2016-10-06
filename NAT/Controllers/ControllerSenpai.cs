@@ -30,6 +30,9 @@ namespace NAT.Controllers {
             else _controllers[name] = new Tuple<IGameController, bool>(_controllers[name].Item1, active);
         }
 
+        public void SetAllControllersActive(bool active) {
+            _controllers = _controllers.ToDictionary(x => x.Key, x => new Tuple<IGameController, bool>(x.Value.Item1,active));    
+        }
 
         public void Update(GameTime _time, Func<KeyValuePair<string, Tuple<IGameController, bool>>,bool> selector) {
             foreach (var controller in GetBySelector(selector)) controller.Update(_time);

@@ -21,13 +21,16 @@ namespace NAT.Controllers {
 
         protected List<Keys> IgnoreKeys = new List<Keys>();
 
-        public int[] GameTurnDelta { get; protected set; } = new int[] { 500, 500 };
+        public virtual int[] GameTurnDelta { get; protected set; } = new int[] { 500, 500 };
         protected int[] _GameTurnTimer = new int[] { 0, 0 };
 
-        protected int minTurnDelta = 250;
-        protected int startTurnDelta = 500;
+        protected virtual int minTurnDelta { get; set; } = 250;
+        protected virtual int startTurnDelta { get; set; } = 500;
 
-        public int GameInputDelta { get; protected set; } = 75;
+        protected virtual int GameTurnDecreaseIndex { get; set; } = 15000;
+        protected virtual int GameInputDecreaseIndex { get; set; } = 8000;
+
+        public virtual int GameInputDelta { get; protected set; } = 75;
         protected int _GameInputTimer = 0;
 
 
@@ -40,7 +43,10 @@ namespace NAT.Controllers {
             _scoreService = new CommonScoreService();
         }
 
+        private int defInputDelta;
+
         public void Start() {
+            defInputDelta = GameInputDelta;
             _view.LoadContent();
             _view.Init(_scoreService.GetScores());
         }
@@ -62,9 +68,9 @@ namespace NAT.Controllers {
             GameTurnDelta = GameTurnDelta
             .Select(x =>
                x < minTurnDelta ? x :
-                startTurnDelta - (int)Math.Floor(Math.Sqrt(_model.CurrentScore / 15000)) < minTurnDelta ? minTurnDelta : startTurnDelta - (int)Math.Floor(Math.Sqrt(_model.CurrentScore / 15000)))
+                startTurnDelta - (int)Math.Floor(Math.Sqrt(_model.CurrentScore / GameTurnDecreaseIndex)) < minTurnDelta ? minTurnDelta : startTurnDelta - (int)Math.Floor(Math.Sqrt(_model.CurrentScore / GameTurnDecreaseIndex)))
             .ToArray();
-            GameInputDelta = 75 - (int)Math.Floor(Math.Sqrt(_model.CurrentScore / 15000)) < 5 ? 5 : 75 - (int)Math.Floor(Math.Sqrt(_model.CurrentScore / 15000));
+            GameInputDelta = defInputDelta - (int)Math.Floor(Math.Sqrt(_model.CurrentScore / GameInputDecreaseIndex)) < 5 ? 5 : 75 - (int)Math.Floor(Math.Sqrt(_model.CurrentScore / GameInputDecreaseIndex));
         }
 
         protected abstract void ProcessInput(Keys key);
