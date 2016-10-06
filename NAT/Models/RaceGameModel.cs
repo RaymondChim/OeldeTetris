@@ -8,8 +8,8 @@ using System.Diagnostics;
 
 namespace NAT.Models {
     public class RaceGameModel : IRaceGameModel {
-        public int counter = 0;
-        public int gap = 0;
+        public int[] counter = { 0, 0 };
+        public int[] gap = { 3, 0 };
         public Race.Map[] Maps;
         public Car Ferrari { get; set; } //Потому что Ferrari для пиздатых мужиков
         public int Score { get; set; }
@@ -26,7 +26,7 @@ namespace NAT.Models {
                                                  new Brick(6, 19)},
                                                  0);
             Maps = new Race.Map[] { new Race.Map(), new Race.Map() };
-           // Maps[Ferrari.mapId].addCarToMap(Ferrari);
+            //Maps[Ferrari.mapId].addCarToMap(Ferrari);
         }
 
         public RaceGameModel(int Score) {
@@ -65,14 +65,19 @@ namespace NAT.Models {
 
 
         public void AddNewWall(int mapId) {
-            if (counter == 15 && Ferrari.mapId == mapId) {
+            if (counter[mapId] == 6) {
+                gap[mapId] -= 4;
+            }
+            if (counter[mapId] == 7 && Ferrari.mapId == mapId) {
                 Maps[mapId].NextBlock = new Race.Block(new Brick[10]);
                 for (int i = 0; i < 10; i++) {
                     Maps[mapId].NextBlock.Bricks[i] = new Brick(i, 0);
                 }
                 Maps[mapId].addBlockToMap();
+                counter[mapId] = 0;
                 return;
             }
+
             const int EMPTY_BRICS_IN_WALL = 3;
             const int AMOUNT_BRICKS_IN_WALL = 7;
             int FirstEmptyCell = rand.Next(AMOUNT_BRICKS_IN_WALL);
@@ -87,20 +92,9 @@ namespace NAT.Models {
                 Maps[mapId].NextBlock.Bricks[i] = new Brick(j, 0);
             }
             Maps[mapId].addBlockToMap();
+            counter[mapId]++;
         }
 
-        private void AddNewWalls() {
-            if (counter == 14) {
-                gap -= 3;
-            }
-            
-            AddNewWall(0);
-            AddNewWall(1);
-            if (counter == 15) {
-                counter = 0;
-            }
-            counter++;
-        }
 
         public Brick[] GetMap(int mapId) {
             if (mapId >= Maps.Count()) throw new ArgumentException("Invalid Map Index");
@@ -126,7 +120,6 @@ namespace NAT.Models {
         public void MoveCar(int direction) {
             if (direction != -1 && direction != 1 ) throw new ArgumentException("Invalid direction value");
             if (StopMove(direction)) {
-                //GameEnd?.Invoke();
                 return;
             }
             Car Lamborghini = new Car(Ferrari); //Ламбо для пацанов
@@ -155,7 +148,7 @@ namespace NAT.Models {
             foreach (Brick br in Maps[mapId].AllBricks) {
                 if (br.Ypos >= Harlamov) {
                     foreach (Brick carbr in Lamborghini.Bricks) {
-                        if (carbr.Xpos == br.Xpos && carbr.Ypos == br.Ypos) {
+                        if (carbr.Xpos == br.Xpos && carbr.Ypos == br.Ypos && Lamborghini.mapId == mapId) {
                             return true;
                         }
                     }
@@ -170,11 +163,12 @@ namespace NAT.Models {
             DeleteBlock(mapId);
             foreach (Race.Block bl in Maps[mapId].Walls) {
                 foreach (Brick br in bl.Bricks) {
-                    if (br.Ypos + 1 <= 19) {
+                    if (br.Ypos <= 19) {
                         br.Ypos++;
-                    } 
+                    }
                 }
             }
+            
         }
 
         // И тут!!!
@@ -190,11 +184,6 @@ namespace NAT.Models {
             }
         }
 
-        private void MovesBlockDown() {
-            MoveBlockDown(0);
-            MoveBlockDown(1);
-        }
-
         
         public void ProcessTurn(int mapId) {
             if (mapId >= Maps.Count()) throw new ArgumentException("Invalid Map Index");
@@ -206,13 +195,13 @@ namespace NAT.Models {
             if (!CheckColision(mapId, Ferrari)) {
                 //Play
                 Score += 10;
-                MovesBlockDown();
-                if(gap == 5) {
-                    gap = 0;
-                    AddNewWalls();
+                MoveBlockDown(mapId);
+                if (gap[mapId] == 6) {
+                    gap[mapId] = 0;
+                    AddNewWall(mapId);
                 }
                 else {
-                    gap++;
+                    gap[mapId]++;
                 }
             }
         }
