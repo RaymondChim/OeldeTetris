@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Input;
 using NAT.Services;
+using NAT.Models;
 
 namespace NAT.Views {
     public interface IView {
@@ -13,5 +14,8 @@ namespace NAT.Views {
         void Init(Scores scores);
 
         Keys[] UpdateuserInput();
+
+        void Display(IModel _model);
+
     }
 }

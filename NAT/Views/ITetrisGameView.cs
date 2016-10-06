@@ -13,7 +13,6 @@ namespace NAT.Views {
 
         // Отображаеть модель
 
-        void Display(ITetrisGameModel _model);
         void TestDisplay();
         // тут вьюшка должна прочекать пользовательский ввод и вызвать событие если надо
 
