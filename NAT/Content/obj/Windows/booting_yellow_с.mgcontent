@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/Everlating/documents/visual studio 2015/Projects/NAT/NAT/Content/booting_yellow_с.avi</SourceFile>
-  <SourceTime>2016-10-02T21:50:40.897112+03:00</SourceTime>
-  <DestFile>C:/Users/Everlating/documents/visual studio 2015/Projects/NAT/NAT/Content/bin/Windows/booting_yellow_с.xnb</DestFile>
-  <DestTime>2016-10-04T19:38:04.4538765+03:00</DestTime>
+  <SourceFile>C:/Users/Artem/Desktop/OeldeTetris-master/NAT/Content/booting_yellow_с.avi</SourceFile>
+  <SourceTime>2016-10-05T05:49:34+03:00</SourceTime>
+  <DestFile>C:/Users/Artem/Desktop/OeldeTetris-master/NAT/Content/bin/Windows/booting_yellow_с.xnb</DestFile>
+  <DestTime>2016-10-06T10:50:20.5143528+03:00</DestTime>
   <Importer>H264Importer</Importer>
   <ImporterTime>2016-03-30T09:36:08+03:00</ImporterTime>
   <Processor>VideoProcessor</Processor>
@@ -11,6 +11,6 @@
   <Dependencies />
   <BuildAsset />
   <BuildOutput>
-    <string>C:/Users/Everlating/documents/visual studio 2015/Projects/NAT/NAT/Content/bin/Windows/booting_yellow_с.avi</string>
+    <string>C:/Users/Artem/Desktop/OeldeTetris-master/NAT/Content/bin/Windows/booting_yellow_с.avi</string>
   </BuildOutput>
 </PipelineBuildEvent>
