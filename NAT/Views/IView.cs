@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Input;
 using NAT.Services;
 using NAT.Models;
+using Microsoft.Xna.Framework;
 
 namespace NAT.Views {
     public interface IView {
+        string UserName { set; }
+
         void LoadContent();
 
         void Init(Scores scores);
@@ -18,6 +21,8 @@ namespace NAT.Views {
         void Display(IModel _model);
 
         void DisplayGameOver();
+
+        void Update(GameTime time);
 
     }
 }

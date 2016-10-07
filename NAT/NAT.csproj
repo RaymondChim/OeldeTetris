@@ -48,6 +48,7 @@
     <Compile Include="Menu\Buttons\ButtonBase.cs" />
     <Compile Include="Menu\Menu.cs" />
     <Compile Include="Menu\Buttons\SimpleButton.cs" />
+    <Compile Include="Menu\NamerKeysInputAdapter.cs" />
     <Compile Include="Models\IModel.cs" />
     <Compile Include="Models\IRaceGameModel.cs" />
     <Compile Include="Models\RaceGameModel.cs" />
@@ -61,8 +62,12 @@
     <Compile Include="Models\Tetris\Map.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\BootingAnimationService.cs" />
     <Compile Include="Services\CommonScoreService.cs" />
+    <Compile Include="Services\IBootingAnimationService.cs" />
     <Compile Include="Services\IScoreService.cs" />
+    <Compile Include="Menu\Namer.cs" />
+    <Compile Include="Views\ICoreView.cs" />
     <Compile Include="Views\IRaceGameView.cs" />
     <Compile Include="Views\IView.cs" />
     <Compile Include="Views\TetrisGameView.cs" />

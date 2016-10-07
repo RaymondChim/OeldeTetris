@@ -8,7 +8,8 @@ using System;
 using NAT.Controllers;
 using NAT.Models;
 using NAT.Views;
-
+using NAT.Services;
+using NAT.Menu;
 
 namespace NAT {
     /// <summary>
@@ -20,8 +21,10 @@ namespace NAT {
 
         public TetrisGameController _tetrisController;
         public RaceGameController _raceController;
-
         ControllerSenpai senpai;
+
+        SpriteFont font;
+        NamerKeysInputAdapter adapter; 
 
         public GameMain() {
 
@@ -41,10 +44,12 @@ namespace NAT {
                     new Tuple<string, IGameController>("tetris",_tetrisController),
                     new Tuple<string, IGameController>("race",_raceController)
                 }
-            );
+            ) {
+                CoreView = view
+            };
 
+            adapter = new NamerKeysInputAdapter(new Namer());
         }
-
 
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -64,11 +69,10 @@ namespace NAT {
         /// </summary>
         protected override void LoadContent() {
             // Create a new SpriteBatch, which can be used to draw textures.
-
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            senpai.SetControllerActive("race", true);
             senpai.Start(ControllerSenpai.AnySelector);
-
+            adapter.LoadContent(Content, "trY", "trYD");
+            font = Content.Load<SpriteFont>("text_big");
             // TODO: use this.Content to load your game content here
         }
 
@@ -89,9 +93,9 @@ namespace NAT {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             senpai.Update(gameTime, ControllerSenpai.ActiveSelector);
-
             // TODO: Add your update logic here
-            base.Update(gameTime);
+            adapter.Update();
+            base.Update(gameTime);  
         }
 
         /// <summary>
@@ -102,9 +106,9 @@ namespace NAT {
             GraphicsDevice.Clear(Color.DimGray);
             // TODO: Add your drawing code here
             //_controller.Render();
-
             senpai.Render(ControllerSenpai.ActiveSelector);
             base.Draw(gameTime);
+            //adapter.DrawNamer(spriteBatch, font, new Vector2(100, 100), new Color(0xff, 0xcb, 0x28));
         }
     }
 }

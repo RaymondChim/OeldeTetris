@@ -10,9 +10,11 @@ using System.Linq;
 using System.Diagnostics;
 using System.Windows;
 using System;
+using NAT.Menu;
+
 namespace NAT.Views
 {
-    class View : IView
+    class View :  ICoreView
     {
         //Глобальный контент
         private SoundEffect booting;
@@ -34,7 +36,16 @@ namespace NAT.Views
         private Texture2D screenY;
         private Texture2D screenG;
         private Texture2D gameoverMsg;
+        private Texture2D lightB;
+        private Texture2D lightY;
+        private Texture2D lightG;
+        private Texture2D lightR;
+        private Texture2D handle;
+        private Texture2D onOff;
         private SpriteFont text;
+        private SpriteFont textSmall;
+        private SpriteFont textBig;
+
         private Color yel = new Color(0xff, 0xcb, 0x28);
         private Color grn = new Color(0x24,0xff,0x51);
         private readonly GameMain _GameMain;
@@ -50,16 +61,18 @@ namespace NAT.Views
         private int backTopOffset = -15;
         private int backScreenOffset = 20;
         private int topOffset = 118;
+        private int swtichAtlasOffset = 141;
+        private int onOffOffset = 146;
         
         //Блок "Зачем это нужно?"
         private int sizeModifier = 1;
-        private int modeTest = 0;
         private bool tehEnd = false;
         
         //Эмпирическией размер кирпичей
         private int brickSizeX = 37;
         private int brickSizeY = 39;
-        
+        // 77.5 x 77.5 - cube or 37.2 x 37.2 
+
         //Режимы
         int backMode, frontMode;
 
@@ -79,8 +92,20 @@ namespace NAT.Views
         Texture2D textFieldOff = null;
         Texture2D GLtextFieldOn = null;
         Texture2D Screen = null;
+        Texture2D lightFront = null;
+        Texture2D lightBack = null;
         Color backColor, frontColor;
+        Texture2D plc = null;
 
+        Texture2D trY = null;
+        Texture2D trYD = null;
+
+        public Action TurnOnButtonPressed {get;set;}
+        public Action OnBootingAnimationEnd { get; set; }
+
+        public Action<string> SetUserName { get; set; }
+
+        public string UserName {get;set;}
 
         public View(GameMain game)
         {
@@ -89,7 +114,10 @@ namespace NAT.Views
 
         public void LoadContent()
         {
-            background = _GameMain.Content.Load<Texture2D>("tetris_screen_test");
+            background = _GameMain.Content.Load<Texture2D>("tetris_screen_final");
+            plc = _GameMain.Content.Load<Texture2D>("tetris_screen_test");
+
+            //Поля
             textBorderY = _GameMain.Content.Load<Texture2D>("textBorderY"); 
             GLtextBorderY = _GameMain.Content.Load<Texture2D>("GLtextBorderY"); 
             sideFieldY = _GameMain.Content.Load<Texture2D>("sideFieldY"); 
@@ -100,28 +128,40 @@ namespace NAT.Views
             GLsideFieldG = _GameMain.Content.Load<Texture2D>("GLsideFieldG");
             fieldG = _GameMain.Content.Load<Texture2D>("fieldG");
             GLfieldG = _GameMain.Content.Load<Texture2D>("GLfieldG");
+            //Тайлы
             text = _GameMain.Content.Load<SpriteFont>("text");
+            textSmall = _GameMain.Content.Load<SpriteFont>("text_small");
+            textBig = _GameMain.Content.Load<SpriteFont>("text_big");
+
             tileY = _GameMain.Content.Load<Texture2D>("tileA");
             tileG = _GameMain.Content.Load<Texture2D>("tileG");
             GLtileY = _GameMain.Content.Load<Texture2D>("GLtileY");
             GLtileG = _GameMain.Content.Load<Texture2D>("GLtileG");
+            //Экраны
             screenG = _GameMain.Content.Load<Texture2D>("screenG");
             screenY = _GameMain.Content.Load<Texture2D>("screenY");
+            //Misc.
+            handle = _GameMain.Content.Load<Texture2D>("switch");
+            onOff = _GameMain.Content.Load<Texture2D>("onoffAtlas");
             gameoverMsg = _GameMain.Content.Load<Texture2D>("gmvr");
+            //Лампы
+            lightB = _GameMain.Content.Load<Texture2D>("lightB");
+            lightG = _GameMain.Content.Load<Texture2D>("lightG");
+            lightY = _GameMain.Content.Load<Texture2D>("lightY");
+            lightR = _GameMain.Content.Load<Texture2D>("lightR");
             booting = _GameMain.Content.Load<SoundEffect>("start");
+
             _GameMain.graphics.PreferredBackBufferWidth = resX;
             _GameMain.graphics.PreferredBackBufferHeight = resY;
             _GameMain.Window.Position = new Point(0, 0);
             _GameMain.graphics.ApplyChanges();
             sizeModifier = 4000 / resX;
 
-        }
-        //Под снос:
-        public void TestDisplay()
-        {
-            // 77.5 x 77.5 - cube or 37.2 x 37.2 
+            trY = _GameMain.Content.Load<Texture2D>("trY");
+            trYD = _GameMain.Content.Load<Texture2D>("trYD");
 
         }
+
 
         public void Init(Scores scores) {
             highscoreTable = scores;
@@ -134,57 +174,7 @@ namespace NAT.Views
             // Пока var, если собъётся - напиши через блоки и брики
             // 0 - жёлтый, 1 - зелёный
 
-            _GameMain.GraphicsDevice.Clear(Color.White);
             _GameMain.spriteBatch.Begin();
-            _GameMain.spriteBatch.Draw(background, new Rectangle(0, 0, 1920, 1080), /*new Rectangle(69,79,593,558), */Color.White);
-
-            //Под снос:
-            #region oldColoring
-            /*
-            if (frontMode == 1)
-            {
-                backColor = yel;
-                frontColor = grn;
-                frontBrick = tileG;
-                Screen = screenG;
-                GLfrontBrick = GLtileG;
-                backBrick = tileY; 
-                frontField = fieldG;
-                GLfrontField = GLfieldY;
-                backField = fieldY; 
-                GLbackField = GLfieldY;// plc
-                sideFieldOn = sideFieldG;
-                GLsideFieldOn = GLsideFieldG;
-                sideFieldOff = sideFieldY; //plc
-                textFieldOn = textBorderY;
-                textFieldOff = textBorderY; // plc
-                GLtextFieldOn = GLtextBorderY;                
-                _GameMain.spriteBatch.Draw(tileY, new Rectangle(1379, 174, 38, 48), Color.White); // layer marker
-                backMode = 0;
-            }
-            else
-            {
-                backColor = grn;
-                frontColor = yel;
-                frontBrick = tileY;
-                Screen = screenY;
-                GLfrontBrick = GLtileY;
-                backBrick = tileG; 
-                frontField = fieldY;
-                GLfrontField = GLfieldY;
-                backField = fieldG; 
-                GLbackField = GLfieldY;
-                sideFieldOn = sideFieldY;
-                GLsideFieldOn = GLsideFieldY;
-                sideFieldOff = sideFieldG; 
-                textFieldOn = textBorderY; 
-                textFieldOff = textBorderY; // plc
-                GLtextFieldOn = GLtextBorderY;
-                _GameMain.spriteBatch.Draw(tileY, new Rectangle(1379, 275, 38, 48), Color.White); // layer marker
-                backMode = 1;
-            }*/
-            #endregion oldColoring 
-
 
             if (_model is ITetrisGameModel)
             {
@@ -199,14 +189,15 @@ namespace NAT.Views
             if (tehEnd) {
                 _GameMain.spriteBatch.Draw(fieldY, new Rectangle(618, 426, 201, 100), Color.White);
             }
+            _GameMain.spriteBatch.Draw(lightG, new Rectangle(1420, 865, 43, 43), Color.White); // layer marker
+
             _GameMain.spriteBatch.End();
 
         }
 
-
-        public void DisplayScores(Scores scores, ITetrisGameModel _model, int startX, int startY, Color color)
+        public void DisplayScores(Scores scores, IModel _model, int startX, int startY, Color color)
         {
-            var scoreArray = scores.Heaver.Union(new ScoreHeaver[] { new ScoreHeaver("XXX", _model.CurrentScore) }).OrderByDescending(x => x.Score).Take(10).ToList();
+            var scoreArray = scores.Heaver.Union(new ScoreHeaver[] { new ScoreHeaver(UserName, _model.CurrentScore) }).OrderByDescending(x => x.Score).Take(10).ToList();
             for (int i = 0; i < scoreArray.Count(); i++)
             {
                 _GameMain.spriteBatch.DrawString(text, scoreArray[i].Name + "    " + scoreArray[i].Score, new Vector2(startX, startY + 17 * i), color);
@@ -221,9 +212,11 @@ namespace NAT.Views
 
         private void determinateColor()
         {
+            lightBack = lightB;
             if (frontMode == 1)
             {
                 backColor = yel;
+                lightFront = lightG;
                 frontColor = grn;
                 frontBrick = tileG;
                 Screen = screenG;
@@ -232,19 +225,21 @@ namespace NAT.Views
                 frontField = fieldG;
                 GLfrontField = GLfieldY;
                 backField = fieldY;
-                GLbackField = GLfieldY;// plc
+                GLbackField = GLfieldY;
                 sideFieldOn = sideFieldG;
                 GLsideFieldOn = GLsideFieldG;
-                sideFieldOff = sideFieldY; //plc
+                sideFieldOff = sideFieldY; 
                 textFieldOn = textBorderY;
-                textFieldOff = textBorderY; // plc
+                textFieldOff = textBorderY; 
                 GLtextFieldOn = GLtextBorderY;
-                _GameMain.spriteBatch.Draw(tileY, new Rectangle(1379, 174, 38, 48), Color.White); // layer marker
+                _GameMain.spriteBatch.Draw(lightFront, new Rectangle(1430, 169, 43, 43), Color.White); // layer marker
+                _GameMain.spriteBatch.Draw(lightBack, new Rectangle(1430, 252, 43, 43), Color.White); // layer marker
                 backMode = 0;
             }
             else
             {
                 backColor = grn;
+                lightFront = lightY;
                 frontColor = yel;
                 frontBrick = tileY;
                 Screen = screenY;
@@ -258,9 +253,10 @@ namespace NAT.Views
                 GLsideFieldOn = GLsideFieldY;
                 sideFieldOff = sideFieldG;
                 textFieldOn = textBorderY;
-                textFieldOff = textBorderY; // plc
+                textFieldOff = textBorderY; 
                 GLtextFieldOn = GLtextBorderY;
-                _GameMain.spriteBatch.Draw(tileY, new Rectangle(1379, 275, 38, 48), Color.White); // layer marker
+                _GameMain.spriteBatch.Draw(lightBack, new Rectangle(1430, 169, 43, 43), Color.White); // layer marker
+                _GameMain.spriteBatch.Draw(lightFront, new Rectangle(1430, 252, 43, 43), Color.White); // layer marker
                 backMode = 1;
             }
         }
@@ -338,7 +334,6 @@ namespace NAT.Views
             drawBlock(nextBlockFront, GLfrontBrick, phX, phY, 0.55f);
             //Рекорды тут
             DisplayScores(highscoreTable, _model, 969 + backScreenOffset + 7, 441 + backTopOffset, backColor * 0.20f);
-
             _GameMain.spriteBatch.Draw(sideFieldOff, new Rectangle(959 + backScreenOffset, 674 + backTopOffset - 245, 378 / 2, 394 / 2), Color.White * 0.45f);
             _GameMain.spriteBatch.Draw(sideFieldOn, new Rectangle(959, 674 - 245, 378 / 2, 394 / 2), Color.White);
             _GameMain.spriteBatch.Draw(GLsideFieldOn, new Rectangle(959, 674 - 245, 378 / 2, 394 / 2), Color.White * 0.60f);
@@ -349,7 +344,6 @@ namespace NAT.Views
             _GameMain.spriteBatch.Draw(GLsideFieldOn, new Rectangle(959, 674, 378 / 2, 394 / 2), Color.White * 0.60f);
 
         }
-
 
         private void raceDisplay(IRaceGameModel _model) {
             //Бэкмод объявлен наверху в глобальном скоупе
@@ -376,12 +370,63 @@ namespace NAT.Views
             _GameMain.spriteBatch.Draw(frontField, new Rectangle(resOffset + screenOffset - 7, topOffset - 6, 772 / 2, 1593 / 2), Color.White);
             _GameMain.spriteBatch.Draw(GLfrontField, new Rectangle(resOffset + screenOffset - 6, topOffset - 6, 772 / 2, 1593 / 2), Color.White);
 
+            DisplayScores(highscoreTable, _model, 969 + backScreenOffset + 7, 441 + backTopOffset, backColor * 0.20f);
+            _GameMain.spriteBatch.Draw(sideFieldOff, new Rectangle(959 + backScreenOffset, 674 + backTopOffset - 245, 378 / 2, 394 / 2), Color.White * 0.45f);
+            _GameMain.spriteBatch.Draw(sideFieldOn, new Rectangle(959, 674 - 245, 378 / 2, 394 / 2), Color.White);
+            _GameMain.spriteBatch.Draw(GLsideFieldOn, new Rectangle(959, 674 - 245, 378 / 2, 394 / 2), Color.White * 0.60f);
+            DisplayScores(highscoreTable, _model, 969 + 7, 441, frontColor);
+            _GameMain.spriteBatch.Draw(handle, new Rectangle(1300, 710, 141, 106), new Rectangle(swtichAtlasOffset * 2, 0,141,106), Color.White);
+            _GameMain.spriteBatch.Draw(onOff, new Rectangle(1268, 858, 146, 118), new Rectangle(onOffOffset * 0, 0, 146, 118), Color.White);
+            //_GameMain.spriteBatch.Draw(handle, new  Rectangle(200, 200, 200, 200), new Rectangle(200,200,200,200), Color.White, (float)Math.PI, new Vector2(500,500), SpriteEffects.None, 1);
+
         }
 
         public void DisplayGameOver() {
             tehEnd = true;
         }
 
+        IBootingAnimationService _currentAnimation = null;
+        public void StartBootingAnimation(IBootingAnimationService service) {
+            _currentAnimation = service;
+        }
+
+        public void Update(GameTime time) {
+            if(_currentAnimation != null)
+            if (_currentAnimation.Update(time)) {
+                OnBootingAnimationEnd?.Invoke();
+                _currentAnimation = null;
+            }
+            if (NameInputAdapter != null) {
+                if (NameInputAdapter.Update()) {
+                    SetUserName?.Invoke(NameInputAdapter.GetName());
+                    NameInputAdapter = null;
+                    return;
+                }
+            }
+        }
+
+        void ICoreView.GlobalDisplay() {
+            _GameMain.spriteBatch.Begin();
+
+            _GameMain.spriteBatch.Draw(background, new Rectangle(0, 0, 1920, 1080), /*new Rectangle(69,79,593,558), */Color.White);
+            _GameMain.spriteBatch.Draw(screenY , new Rectangle(519, 87, 680, 855), Color.White);
+
+
+            if (_currentAnimation != null)
+                _GameMain.spriteBatch.DrawString(textSmall, _currentAnimation.GetCurrentString(), new Vector2(580, 150), new Color(0xff, 0xcb, 0x28));
+
+            if(NameInputAdapter != null)
+                NameInputAdapter.DrawNamer(_GameMain.spriteBatch, textBig, new Vector2(800, 400), new Color(0xff, 0xcb, 0x28));
+
+            _GameMain.spriteBatch.End();
+        }
+
+        public NamerKeysInputAdapter NameInputAdapter;
+        public void DisplayUserNameInput(NamerKeysInputAdapter adapter) {
+            NameInputAdapter = adapter;
+            NameInputAdapter.trTex = trY;
+            NameInputAdapter.trTexD = trYD;
+        }
     }
 }
 
