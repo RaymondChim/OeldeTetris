@@ -276,6 +276,29 @@ C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Deb
 C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\SharpDX.XInput.xml
 C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\SharpDX.RawInput.xml
 C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\SharpDX.Direct3D9.xml
-C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\obj\x86\Debug\NAT.csprojResolveAssemblyReference.cache
 C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\obj\x86\Debug\NAT.exe
 C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\obj\x86\Debug\NAT.pdb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\handle.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\lightB.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\lightG.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\lightR.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\lightY.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\lightYN.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\switch.xnb
+D:\OeldeTetris-master\NAT\bin\Windows\x86\Debug\Content\onoffAtlas.xnb
+C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\lightYN.xnb
+C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\handle.xnb
+C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\lightB.xnb
+C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\lightG.xnb
+C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\lightR.xnb
+C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\lightY.xnb
+C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\onoffAtlas.xnb
+C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\switch.xnb
+C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\text_small.xnb
+C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\trG.xnb
+C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\trY.xnb
+C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\text_big.xnb
+C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\trGD.xnb
+C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\trYD.xnb
+C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\bin\Windows\x86\Debug\Content\tetris_screen_final.xnb
+C:\Users\rolf2\Documents\Visual Studio 2015\Projects\NAT\NAT\obj\x86\Debug\NAT.csprojResolveAssemblyReference.cache

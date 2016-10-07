@@ -15,7 +15,7 @@ namespace NAT.Controllers {
         public override int GameInputDelta { get; protected set; } = 50;
 
         protected override int minTurnDelta { get; set; } = 100;
-        protected override int startTurnDelta { get; set; } = 300;
+        protected override int startTurnDelta { get; set; } = 200;
 
         protected override int GameTurnDecreaseIndex { get; set; } = 10000;
         protected override int GameInputDecreaseIndex { get; set; } = 5000;

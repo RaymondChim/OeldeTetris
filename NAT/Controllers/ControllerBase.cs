@@ -33,6 +33,9 @@ namespace NAT.Controllers {
         public virtual int GameInputDelta { get; protected set; } = 75;
         protected int _GameInputTimer = 0;
 
+        protected List<Keys> PossibleIgnoreKeys { get; } = new List<Keys>() { Keys.Space, Keys.Up };
+
+        protected bool ProcessTurns { get; set; } = true;
 
         public void Init(IModel model, IView view) {
             if (!(model is MT)) throw new ArgumentException("invalid model type sorry");
@@ -60,7 +63,7 @@ namespace NAT.Controllers {
             if (_GameInputTimer >= GameInputDelta) {
                 var input = _view.UpdateuserInput();
                 foreach (var key in input)
-                    ProcessInput(key);
+                    _processInput(key);
                 _GameInputTimer = 0;
                 IgnoreKeys = IgnoreKeys.Where(x => input.Contains(x)).ToList();
             }
@@ -71,6 +74,15 @@ namespace NAT.Controllers {
                 startTurnDelta - (int)Math.Floor(Math.Sqrt(_model.CurrentScore / GameTurnDecreaseIndex)) < minTurnDelta ? minTurnDelta : startTurnDelta - (int)Math.Floor(Math.Sqrt(_model.CurrentScore / GameTurnDecreaseIndex)))
             .ToArray();
             GameInputDelta = defInputDelta - (int)Math.Floor(Math.Sqrt(_model.CurrentScore / GameInputDecreaseIndex)) < 5 ? 5 : 75 - (int)Math.Floor(Math.Sqrt(_model.CurrentScore / GameInputDecreaseIndex));
+
+            _view.Update(_time);
+        }
+
+        protected virtual void _processInput(Keys key) {
+            if (!ProcessTurns) return;
+            if (IgnoreKeys.Contains(key)) return;
+            ProcessInput(key);
+            if (PossibleIgnoreKeys.Contains(key)) IgnoreKeys.Add(key);
         }
 
         protected abstract void ProcessInput(Keys key);

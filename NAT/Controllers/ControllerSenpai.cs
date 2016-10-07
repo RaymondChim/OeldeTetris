@@ -4,10 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using NAT.Menu;
+using NAT.Services;
+using NAT.Views;
 
 namespace NAT.Controllers {
 
     public class ControllerSenpai {
+
+        public string username { get; set; }
+
+        public ICoreView CoreView { get; set; }
 
         public static bool AnySelector(KeyValuePair<string, Tuple<IGameController, bool>> x) {
             return true;
@@ -36,12 +43,24 @@ namespace NAT.Controllers {
 
         public void Update(GameTime _time, Func<KeyValuePair<string, Tuple<IGameController, bool>>,bool> selector) {
             foreach (var controller in GetBySelector(selector)) controller.Update(_time);
+            CoreView.Update(_time);
         }
         public void Render(Func<KeyValuePair<string, Tuple<IGameController, bool>>, bool> selector) {
+            CoreView.GlobalDisplay();
             foreach (var controller in GetBySelector(selector)) controller.Render();
         }
         public void Start(Func<KeyValuePair<string, Tuple<IGameController, bool>>, bool> selector) {
             foreach (var controller in GetBySelector(selector)) controller.Start();
+            CoreView.StartBootingAnimation(new BootingAnimationService());
+            CoreView.OnBootingAnimationEnd += () => {
+                CoreView.DisplayUserNameInput(new NamerKeysInputAdapter(new Namer()));
+            };
+            CoreView.SetUserName += (name) => {
+                username = name;
+                CoreView.UserName = username;
+                // TODO : random game mode
+                SetControllerActive("tetris",true);
+            };
         }
 
         private IEnumerable<IGameController> GetBySelector(Func<KeyValuePair<string, Tuple<IGameController, bool>>, bool> selector) {

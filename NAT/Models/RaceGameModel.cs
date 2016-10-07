@@ -124,11 +124,12 @@ namespace NAT.Models {
                 return;
             }
             Car Lamborghini = new Car(Ferrari); //Ламбо для пацанов
-
+            if (CheckColisionOnTheSize(Lamborghini.mapId, Lamborghini)) return;
             foreach (Brick br in Lamborghini.Bricks) {
                 br.Xpos += direction;
             }
             if (CheckColision(Lamborghini.mapId, Lamborghini)) return;
+            
             Ferrari = Lamborghini;
         }
 
@@ -158,6 +159,20 @@ namespace NAT.Models {
             return false;
         }
 
+        private bool CheckColisionOnTheSize(int mapId, Car Lamborghini) {
+            const int Harlamov = 17;
+            foreach (Brick br in Maps[mapId].AllBricks) {
+                if (br.Ypos >= Harlamov) {
+                    foreach (Brick carbr in Lamborghini.Bricks) {
+                        if ((carbr.Xpos + 1) == br.Xpos || (carbr.Xpos - 1) == br.Xpos && Lamborghini.mapId == mapId) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
         // Здесь тоже без лямбд хорошо
         public void MoveBlockDown(int mapId) {
             if (mapId >= Maps.Count()) throw new ArgumentException("Invalid Map Index");
@@ -169,7 +184,6 @@ namespace NAT.Models {
                     }
                 }
             }
-            
         }
 
         // И тут!!!
@@ -195,7 +209,7 @@ namespace NAT.Models {
             }
             if (!CheckColision(mapId, Ferrari)) {
                 //Play
-                Score += 10;
+                Score += 2;
                 MoveBlockDown(mapId);
                 if (gap[mapId] == 6) {
                     gap[mapId] = 0;

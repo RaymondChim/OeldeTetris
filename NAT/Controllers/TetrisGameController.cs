@@ -22,10 +22,6 @@ namespace NAT.Controllers {
         protected override int GameInputDecreaseIndex { get; set; } = 8000;
 
 
-        private List<Keys> PossibleIgnoreKeys {get;} = new List<Keys>() { Keys.Space, Keys.Up };
-
-        public bool ProcessTurns { get; set; } = true;
-
         public void Render() {
             _view.Display(_model);
         }
@@ -66,8 +62,6 @@ namespace NAT.Controllers {
         }
 
         protected override void ProcessInput(Keys key) {
-            if (IgnoreKeys.Contains(key)) return;
-            if (!ProcessTurns) return;
 
             if (key == Keys.Left) _model.MoveCurrentBlock(-1, _model.CurrentMapId);
             if (key == Keys.Right) _model.MoveCurrentBlock(1, _model.CurrentMapId);
@@ -76,7 +70,6 @@ namespace NAT.Controllers {
 
             if (key == Keys.Space) _model.CurrentMapId = _model.CurrentMapId == 0 ? 1 : 0;
 
-            if(PossibleIgnoreKeys.Contains(key))IgnoreKeys.Add(key);
 
         }
     }
